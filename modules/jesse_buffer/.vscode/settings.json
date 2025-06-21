@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "string.h": "c",
+    "jesse_buffer.h": "c",
+    "stdio.h": "c",
+    "stdbool.h": "c",
+    "chrono": "c",
+    "functional": "c"
+  }
+}
