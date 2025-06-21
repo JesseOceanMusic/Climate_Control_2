@@ -1,0 +1,124 @@
+/// ПРИМЕР НЕ РАБОТАЕТ, ТАК КАК ПЕРЕИМЕНОВАН ФАЙЛ "errors_list.def" в "errors_list_example.def" ///
+
+ 
+
+/// === ИНИЦИАЛИЗАЦИЯ === ///
+  //добавить коды и описание ошибок в файл errors_list.def
+  #include "jesse_errors.h"
+
+/// === ИСПОЛЬЗОВАНИЕ БЕЗ ИНТЕРФЕЙСА === ///
+  #include <stdio.h>
+
+  int main()
+  {
+    for(unsigned short i = 0; i < 1000; i++)                                    // ТЕСТ - неправильный код ошибки
+    {
+      raise_error(i);
+    }
+    
+    if (has_unhandled_errors() == true)
+    {
+      printf("ERRORS:\n");
+      printf("id/counter/description\n");
+      for (int id = 0; id < ERRORS_AMOUNT; id++)
+      {
+        if (get_error_counter(id) > 0)
+        {
+          printf("%d/", id);
+          printf("%d/", get_error_counter(id));
+          printf("%s\n", get_error_description_ptr(id));
+        }
+      }
+    }
+    return 0;
+  }
+/*
+  /// === ПРОТОТИП ИНТЕРФЕЙСА === ///
+    #include "jesse_buffer.h"
+    static const char ERROR_HEADER_MESSAGE[] = "ERROR(ID/counter/description):\n";
+    BufferStatus bufferResult;
+
+    static void check_write_result_for_errors(BufferStatus result)                // да, это дублирование функции из интерфейса буффера
+    {                                                                             // исключает взаимодействие модулей одного уровня иерархии
+      if (result == BUFFER_ERROR_NULL)
+      {
+        raise_error(ERROR_ID_BUFFER_NULL);
+      }
+
+      if (result == BUFFER_ERROR_OVERFILL)
+      {
+        raise_error(ERROR_ID_BUFFER_OVERFILLED);
+      }    
+    }
+
+    static void write_error_to_buffer (struct CharBuffer *struct_ptr, int id)
+    {
+      bufferResult = buffer_write_int(struct_ptr, id);                            // ID
+      check_write_result_for_errors(bufferResult);
+
+      bufferResult = buffer_write_char(struct_ptr, "/");
+      check_write_result_for_errors(bufferResult);
+
+      bufferResult = buffer_write_int(struct_ptr, error_counters_arr[id]);        // counter
+      check_write_result_for_errors(bufferResult);
+      
+      bufferResult = buffer_write_char(struct_ptr, "/");
+      check_write_result_for_errors(bufferResult);
+      
+      bufferResult = buffer_write_char(struct_ptr, error_description_ptr[id]);    // description
+      check_write_result_for_errors(bufferResult);
+      
+      bufferResult = buffer_write_char(struct_ptr, "\n");
+      check_write_result_for_errors(bufferResult);
+    }
+
+    void print_errors_log_to_buffer (struct CharBuffer *struct_ptr)               // запись ВСЕХ ошибок за время работы программы в буфер  
+    {
+      bufferResult = buffer_clear(struct_ptr);                                    // освобождаем буфер принудительно
+      check_write_result_for_errors(bufferResult);
+
+      bufferResult = buffer_write_char(struct_ptr, ERROR_HEADER_MESSAGE);         // добавляем заголовок
+      check_write_result_for_errors(bufferResult);
+
+      for (int id = 0; id < ERRORS_AMOUNT; id++)
+      {
+        if (error_counters_arr[id] > 0 && error_description_ptr[id] != NULL)
+        {
+          write_error_to_buffer(struct_ptr, id);
+        }
+      }
+    }
+
+    bool tick_ERRORS_handler (struct CharBuffer *struct_ptr)                      // тикер, должен постоянно вызываться в loop
+                                                                                  // eсли были ошибки В ЦИКЛЕ - запишет в буфер
+    {
+      if (has_unhandled_errors() == true)
+      {
+        bufferResult = buffer_clear(struct_ptr);                                  // освобождаем буфер принудительно
+        check_write_result_for_errors(bufferResult);
+        bufferResult = buffer_write_char(struct_ptr, ERROR_HEADER_MESSAGE);       // добавляем заголовок
+        check_write_result_for_errors(bufferResult);
+
+        for (int id = 0; id < ERRORS_AMOUNT; id++)
+        {
+          if (unhandled_errors[id] == true && error_description_ptr[id] != NULL)
+          {
+            write_error_to_buffer(struct_ptr, id);
+            unhandled_errors[id] = false;                                         // считаем, что обработали ошибку
+          }
+        }
+        return true;
+      }
+      return false;
+    }
+*/
+  /*
+    в loop():
+    tick_ERRORS_handler();                                                        // non-blocking ticker
+
+    в функциях/методах, когда происходит ошибка:
+    raise_error(ERROR_ID_UNDEFINED);                                              //отправляем нужный код ошибки в функцию raise_error()
+
+    запись отчета в буфер обо всех ошибках, которые происходили:
+    print_errors_log_to_buffer();
+  */
