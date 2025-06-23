@@ -1,5 +1,0 @@
-ERRORS_LIST(ERROR_ID_UNDEFINED,         "UNDEFINED ERROR")
-ERRORS_LIST(ERROR_ID_BUFFER_NULL,       "в буфер пришел нулевой (NULL) указатель")
-ERRORS_LIST(ERROR_ID_BUFFER_OVERFILLED, "переполнен буфер для отправки сообщений")
-ERRORS_LIST(ERROR_ID_SENSOR_FAIL,       "датчик не отвечает")
-ERRORS_LIST(ERROR_ID_WIFI_DISCONNECTED, "потеряно соединение с Wi-Fi")

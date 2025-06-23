@@ -10,7 +10,8 @@
     unsigned int offset;
   };
   
-  #define ARRAY_IS_FULL_FOOTER_MSG "\n\n...ERROR: BUFFER IS OVERFILLED"       // нужен в глобале для тестов                          
+  extern const char* ARRAY_IS_FULL_FOOTER_MSG;
+  //#define ARRAY_IS_FULL_FOOTER_MSG "\n\n...ERROR: BUFFER IS OVERFILLED"       // нужен в глобале для тестов                          
 
   bool buffer_write_char       (struct CharBuffer *struct_ptr, const char *data);
   bool buffer_write_int        (struct CharBuffer *struct_ptr, int var);

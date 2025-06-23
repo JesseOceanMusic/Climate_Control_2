@@ -1,14 +1,14 @@
 #include "j_errors.h"
 
-  static const char *error_description_ptr [J_ERRORS_AMOUNT] =                    // указатели на текстовое описание ошибок из .def файла
+  static const char *error_description_ptr [J_ERRORS_AMOUNT] =                  // указатели на текстовое описание ошибок из .def файла
   {
     #define ERRORS_LIST(error_id, description) [error_id] = description,        // X-MACROS
     #include "j_errors_list.def"
     #undef ERRORS_LIST
   };
 
-  bool unhandled_errors [J_ERRORS_AMOUNT] = {false};                              // необработанные ошибки
-  static unsigned short error_counters_arr [J_ERRORS_AMOUNT] = {0};               // количество ошибок за всё время работы программы
+  bool unhandled_errors [J_ERRORS_AMOUNT] = {false};                            // необработанные ошибки
+  static unsigned short error_counters_arr [J_ERRORS_AMOUNT] = {0};             // количество ошибок за всё время работы программы
 
   static bool is_error_id_correct(unsigned short error_id)
   {
@@ -35,7 +35,7 @@
     {
       return error_counters_arr[error_id];
     }
-    return UNSIGNED_SHORT_BAD_RETURN_55555;                               // ОШИБКА - возвращаем подозрительно симметричное число
+    return UNSIGNED_SHORT_BAD_RETURN_55555;                                     // ОШИБКА - возвращаем подозрительно симметричное число
   }
 
   void raise_error(unsigned short error_id)                                     // поднять флаг ошибки (принимает id)

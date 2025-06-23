@@ -4,8 +4,8 @@ void j_buffer_test()
 {
   printf("j_buffer_test.c: ЗАПУСК ТЕСТИРОВАНИЯ\n");
 
-  static const char array_is_full_footer_msg[] = ARRAY_IS_FULL_FOOTER_MSG;
-  char char_buffer_arr[sizeof(array_is_full_footer_msg)];
+  unsigned int array_is_full_footer_msg_size = 1 + snprintf(NULL, 0, "%s", ARRAY_IS_FULL_FOOTER_MSG);
+  char char_buffer_arr[array_is_full_footer_msg_size];
   struct CharBuffer charBuffer = {
     .arr_ptr = char_buffer_arr,
     .arr_size = sizeof(char_buffer_arr),
@@ -52,7 +52,7 @@ void j_buffer_test()
     }
     // Пытаемся записать строку, которая переполнит буфер
     assert(buffer_write_char(&charBuffer, "THIS WILL OVERFLOW THE BUFFER") == false);
-    assert(strcmp(charBuffer.arr_ptr, array_is_full_footer_msg) == 0);
+    assert(strcmp(charBuffer.arr_ptr, ARRAY_IS_FULL_FOOTER_MSG) == 0);
     assert(has_unhandled_errors() == true);
     assert(charBuffer.offset == charBuffer.arr_size - 1);
     printf("PASS: Переполнение буфера.\n");

@@ -5,6 +5,8 @@
   #include <string.h>
 #endif
 
+const char* ARRAY_IS_FULL_FOOTER_MSG = "\n\n...ERROR: BUFFER IS OVERFILLED";
+
 bool buffer_write_char(struct CharBuffer *struct_ptr, const char *data)         // основная функция ЗАПИСИ в буфер CHAR
 {
   if(struct_ptr == NULL || data == NULL)
@@ -20,17 +22,17 @@ bool buffer_write_char(struct CharBuffer *struct_ptr, const char *data)         
                                    "%s", data);                                 // Оно также запишет столько, сколько влезет, и поставит нуль-терминатор.
   }
 
-  if (struct_ptr->offset >= struct_ptr->arr_size - 1)                           // 3. Проверяем, не переполнился ли offset после попытки записи.
+  if (struct_ptr->offset >= struct_ptr->arr_size)                               // 3. Проверяем, не переполнился ли offset после попытки записи.
   {
     struct_ptr->offset = struct_ptr->arr_size - 1;                              // устанавливаем offset на последний элемент массива
     
-    static const char array_is_full_footer_msg[] = ARRAY_IS_FULL_FOOTER_MSG;
-    if(struct_ptr->arr_size >= sizeof(array_is_full_footer_msg))                // 4. Проверяем, достаточно ли места в буффере, чтобы поместилось сообщение.
+    unsigned int needed_size = 1 + snprintf(NULL, 0, "%s", ARRAY_IS_FULL_FOOTER_MSG);
+    if(struct_ptr->arr_size >= needed_size)                                     // 4. Проверяем, достаточно ли места в буффере, чтобы поместилось сообщение.
     {
-      struct_ptr->offset -= sizeof(array_is_full_footer_msg) - 1;                   // сдвигаем offset на размер сообщения об ошибке (sizeof(ARRAY_IS_FULL_FOOTER_MSG) включает нуль-терминатор)
+      struct_ptr->offset -= needed_size - 1;                                    // сдвигаем offset на размер сообщения об ошибке (sizeof(ARRAY_IS_FULL_FOOTER_MSG) включает нуль-терминатор)
       struct_ptr->offset += snprintf(struct_ptr->arr_ptr + struct_ptr->offset,
                                     struct_ptr->arr_size - struct_ptr->offset,
-                                    "%s", array_is_full_footer_msg);
+                                    "%s", ARRAY_IS_FULL_FOOTER_MSG);
     }
     raise_error(ERROR_ID_BUFFER_OVERFILLED);
     return false;
