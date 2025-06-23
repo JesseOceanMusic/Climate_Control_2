@@ -24,11 +24,11 @@
 
   static bool is_buffer_has_enough_space(int id)
   {
-    //unsigned int needed_size = strlen(get_error_description_ptr(id)) + 1 + 3 + 5 + 5; // описание + нуль терминатор + ("/","/","\n") + counter (short = max 5) количество ошибок (99999 ошибок)
     unsigned int needed_size = 1 + snprintf(NULL, 0, "%d/%d/%s\n", 
                                   id, 
                                   get_error_counter(id), 
                                   get_error_description_ptr(id));
+                                  
     if (buffer_size_left(&charBufferForErrors) < needed_size)
     {
       return false; // МЕСТО КОНЧИЛОСЬ
