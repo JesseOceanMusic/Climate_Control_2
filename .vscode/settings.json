@@ -1,9 +1,12 @@
 {
   "files.associations": {
     "*.def": "c",
-    "jesse_errors_api.h": "c",
-    "jesse_buffer.h": "c",
-    "jesse_errors.h": "c",
-    "cstdlib": "c"
+    "cstdlib": "c",
+    "stdbool.h": "c",
+    "stdio.h": "c",
+    "j_errors.h": "c",
+    "j_errors_test.h": "c",
+    "j_buffer.h": "c",
+    "j_buffer_test.h": "c"
   }
 }
