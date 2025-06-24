@@ -11,7 +11,7 @@ bool buffer_write_char(struct CharBuffer *struct_ptr, const char *data)         
 {
   if(struct_ptr == NULL || data == NULL)
   {
-    raise_error(ERROR_ID_BUFFER_NULL);
+    raise_error(ERR_ID__NULL_IN_BUFFER);
     return false;
   }
 
@@ -22,7 +22,7 @@ bool buffer_write_char(struct CharBuffer *struct_ptr, const char *data)         
                                    "%s", data);                                 // Оно также запишет столько, сколько влезет, и поставит нуль-терминатор.
   }
 
-  if (struct_ptr->offset >= struct_ptr->arr_size)                               // 3. Проверяем, не переполнился ли offset после попытки записи.
+  if (struct_ptr->offset > struct_ptr->arr_size - 1)                            // 3. Проверяем, не переполнился ли offset после попытки записи.
   {
     struct_ptr->offset = struct_ptr->arr_size - 1;                              // устанавливаем offset на последний элемент массива
     
@@ -34,7 +34,7 @@ bool buffer_write_char(struct CharBuffer *struct_ptr, const char *data)         
                                     struct_ptr->arr_size - struct_ptr->offset,
                                     "%s", ARRAY_IS_FULL_FOOTER_MSG);
     }
-    raise_error(ERROR_ID_BUFFER_OVERFILLED);
+    raise_error(ERR_ID__BUFFER_OVERFILLED);
     return false;
   }
   return true;
@@ -43,7 +43,7 @@ bool buffer_write_char(struct CharBuffer *struct_ptr, const char *data)         
 bool buffer_write_int(struct CharBuffer *struct_ptr, int var)                   // функция записи INT в буфер
 {
   //здесь на NULL проверять не надо -> проверим в buffer_write_char()
-  char var_char[32];
+  char var_char[BUFFER_INT_MAX_SYMBOLS_LENGTH];
   snprintf(var_char, sizeof(var_char), "%d", var);
   return buffer_write_char(struct_ptr, var_char);
 }
@@ -51,7 +51,7 @@ bool buffer_write_int(struct CharBuffer *struct_ptr, int var)                   
 bool buffer_write_float(struct CharBuffer *struct_ptr, float var)               // функция записи FLOAT в буфер
 {
   //здесь на NULL проверять не надо -> проверим в buffer_write_char()
-  char var_char[32];
+  char var_char[BUFFER_FLOAT_MAX_SYMBOLS_LENGTH];
   snprintf(var_char, sizeof(var_char), "%.2f", var);
   return buffer_write_char(struct_ptr, var_char);
 }
@@ -60,7 +60,7 @@ bool buffer_clear(struct CharBuffer *struct_ptr)                                
 {
   if(struct_ptr == NULL)
   {
-    raise_error(ERROR_ID_BUFFER_NULL);
+    raise_error(ERR_ID__NULL_IN_BUFFER);
     return false;
   }
 
@@ -78,7 +78,7 @@ bool is_buffer_empty(struct CharBuffer *struct_ptr)
 {
   if(struct_ptr == NULL)
   {
-    raise_error(ERROR_ID_BUFFER_NULL);
+    raise_error(ERR_ID__NULL_IN_BUFFER);
     return false;
   }
 
@@ -93,7 +93,7 @@ unsigned int buffer_size_left(struct CharBuffer *struct_ptr)
 {
   if(struct_ptr == NULL)
   {
-    raise_error(ERROR_ID_BUFFER_NULL);
+    raise_error(ERR_ID__NULL_IN_BUFFER);
     return 0;
   }
 

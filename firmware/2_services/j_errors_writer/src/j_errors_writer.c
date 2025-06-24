@@ -1,8 +1,6 @@
 #include "j_errors_writer.h"
 
-/// === ИНИЦИАЛИЗАЦИЯ БУФЕРА === ///
-                                                                                // буфер создаётся на самом высоком уровне иерархии
-  static char char_buffer_for_errors_arr[81];                                   // создаём массив (буфер)       
+  static char char_buffer_for_errors_arr[BUFFER_FOR_ERRORS_SIZE];               // создаём массив (буфер)       
   struct CharBuffer charBufferForErrors =                                       // инициализируем структуру для массива (буфера)
   {
     .arr_ptr      = char_buffer_for_errors_arr,                                 // указатель на массив (буфер)
@@ -10,7 +8,10 @@
     .offset       = 0,                                                          // offset(смещение) равно нулю
   };
 
-/// ===
+  static char error_writer_state = ERRORS_WRITER__CUR_TASK__NONE;
+  static unsigned short write_errors_id_itterator = -1;
+  static ErrorsTypes errors_type_filter;
+  static short fsm_msg_generator_state = 0;
 
   static void write_error_to_buffer (int id)
   {
@@ -36,77 +37,120 @@
     return true;
   }
 
-  void write_unhandled_errors_to_buffer(struct ErrorsBufferInfo *errorsBufferInfo)
+  static void write_errors_to_buffer_ini(struct ErrorsBufferInfo *errorsBufferInfo)
   {
-    // 1. Добавляем указатель в структуру
-      errorsBufferInfo->arr_ptr = char_buffer_for_errors_arr;
-      errorsBufferInfo->is_errors_writer_written_anything = false;
-
-    // 2. Отчищаем буфер
-      buffer_clear(&charBufferForErrors);
-
-    // 2. Проверяем есть ли ошибки для записи
-      if(has_unhandled_errors() == false)
-      {   
-        return;  // Нет ошибок
-      }
-
-    // 4-a Записываем в буфер необработанные ошибки
-      
-      for (unsigned short id = 0; id < J_ERRORS_AMOUNT; id++)
+    // Проверяем указатель
+      if(errorsBufferInfo == NULL)
       {
-        // Добавляем заголовок, если это "первое сообщение".
-          if(id == 0)
-          {
-            buffer_write_char(&charBufferForErrors, ERRORS_HEADER_MESSAGE);
-          }
-
-        if (unhandled_errors[id] == true)
-        {
-          if (is_buffer_has_enough_space(id) == false)
-          {
-            return; // МЕСТО КОНЧИЛОСЬ
-          }
-          write_error_to_buffer(id);
-          errorsBufferInfo->is_errors_writer_written_anything = true;
-          unhandled_errors[id] = false;                                           // считаем, что обработали ошибку
-        }
-     }
-  }
-
-  static unsigned short write_all_errors_itterator_id = 0;
-
-  void write_all_errors_to_buffer(struct ErrorsBufferInfo *errorsBufferInfo)
-  {
-    // 1. Добавляем указатель в структуру
-      errorsBufferInfo->arr_ptr = char_buffer_for_errors_arr;
-      errorsBufferInfo->is_errors_writer_written_anything = false;
-
-    // 2. Отчищаем буфер
-      buffer_clear(&charBufferForErrors);
-
-    // 2. если в прошлый раз отправили все ошибки сбрасываем стейт и возвращаем false
-      if (write_all_errors_itterator_id == J_ERRORS_AMOUNT)
-      {
-        write_all_errors_itterator_id = 0;
+        raise_error(ERR_ID__NULL_IN_ERRORS_WRITER);
+        error_writer_state = ERRORS_WRITER__CUR_TASK__ERROR; // ОШИБКА
         return;
       }
 
-    // 4 Записываем в буфер все ошибки
-      for (int id = write_all_errors_itterator_id ; id < J_ERRORS_AMOUNT; id++)
-      {
-        // Добавляем заголовок, если это "первое сообщение".
-          if(id == 0)
+    // Добавляем указатель в структуру
+      errorsBufferInfo->arr_ptr = char_buffer_for_errors_arr;
+
+    // Отчищаем буфер
+      buffer_clear(&charBufferForErrors);
+  }
+
+  static void fsm_msg_generator(struct ErrorsBufferInfo *errorsBufferInfo)
+  {
+    switch(fsm_msg_generator_state)
+    {
+      case 0:
+        // Проверяем указатель на NULL, отчищаем буфер, добавляем указатель в структуру
+          write_errors_to_buffer_ini(errorsBufferInfo);
+          fsm_msg_generator_state = 1;
+          break;
+      
+      case 1:
+        // Проверяем есть ли ошибки для записи
+          if(error_writer_state == ERRORS_WRITER__CUR_TASK__WRITE_UNHANDLED_ERRORS)
           {
-            buffer_write_char(&charBufferForErrors, ERRORS_HEADER_MESSAGE);
+            if(has_unhandled_errors() == false)
+            { 
+              // Нет ошибок
+              error_writer_state = ERRORS_WRITER__CUR_TASK__COMPLETE;
+            }
+          }
+          fsm_msg_generator_state = 2;
+          break;
+
+      case 2:
+        // Добавляем заголовок.
+          if(write_errors_id_itterator == 0) 
+          {
+            if (buffer_write_char(&charBufferForErrors, ERRORS_HEADER_MESSAGE) == false)
+            {
+              error_writer_state = ERRORS_WRITER__CUR_TASK__ERROR;
+            }
+            write_errors_id_itterator = 0;
+          }
+          fsm_msg_generator_state = 3;
+          break;
+
+      case 3:
+        // Проверяем есть ли место для записи одной ошибки.
+          if(charBufferForErrors.offset == 0)
+          {
+            if (is_buffer_has_enough_space(write_errors_id_itterator) == false)
+            {
+              error_writer_state = ERRORS_WRITER__CUR_TASK__ERROR;
+              break;    // МЕСТО КОНЧИЛОСЬ, НЕЛЬЗЯ ЗАПИСАТЬ ДАЖЕ ОДНУ ОШИБКУ - ВСЁ ПЛОХО!
+            }
           }
         
-        if (is_buffer_has_enough_space(id) == false)
-        {
-          return; // МЕСТО КОНЧИЛОСЬ
-        }
-        write_error_to_buffer(id);
-        write_all_errors_itterator_id = id + 1;
-        errorsBufferInfo->is_errors_writer_written_anything = true;
-      }
+        // Фильтр ошибок
+          if(get_error_type(write_errors_id_itterator) == errors_type_filter)
+          {
+          // ALL ERRORS
+            if (error_writer_state == ERRORS_WRITER__CUR_TASK__WRITE_ALL_ERRORS)
+            {
+              write_error_to_buffer(write_errors_id_itterator);
+            }        
+          
+          // UNHANDLED ERRORS
+            if (error_writer_state == ERRORS_WRITER__CUR_TASK__WRITE_UNHANDLED_ERRORS)
+            {
+              if(get_unhandled_error_flag(write_errors_id_itterator) == true)
+              {
+                write_error_to_buffer(write_errors_id_itterator);
+                reset_unhandled_error_flag(write_errors_id_itterator);                // считаем, что обработали ошибку
+              }
+            }
+          }
+          write_errors_id_itterator++;
+
+        // Все ошибки были записаны
+          if(write_errors_id_itterator == J_ERRORS_AMOUNT - 1)
+          {
+            error_writer_state = ERRORS_WRITER__CUR_TASK__COMPLETE;
+          }
+          break;
+    }
+  }
+
+  void errors_writer__write_next_part(struct ErrorsBufferInfo *errorsBufferInfo)
+  {    
+    if(error_writer_state == ERRORS_WRITER__CUR_TASK__WRITE_ALL_ERRORS ||
+       error_writer_state == ERRORS_WRITER__CUR_TASK__WRITE_UNHANDLED_ERRORS)
+    {
+      fsm_msg_generator_state = 0;
+      fsm_msg_generator(errorsBufferInfo);
+    }
+  }
+
+  void errors_writer__set_task__all_errors(ErrorsTypes handle_this_type)
+  {
+    errors_type_filter = handle_this_type;
+    error_writer_state = ERRORS_WRITER__CUR_TASK__WRITE_ALL_ERRORS;
+    write_errors_id_itterator = 0;                                              // Сбрасываем итератор
+  }
+
+  void errors_writer__set_task__unhandled_errors(ErrorsTypes handle_this_type)
+  {
+    errors_type_filter = handle_this_type;
+    error_writer_state = ERRORS_WRITER__CUR_TASK__WRITE_UNHANDLED_ERRORS;
+    write_errors_id_itterator = 0;                                              // Сбрасываем итератор
   }

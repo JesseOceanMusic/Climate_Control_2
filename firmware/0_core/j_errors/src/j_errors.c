@@ -2,12 +2,19 @@
 
   static const char *error_description_ptr [J_ERRORS_AMOUNT] =                  // указатели на текстовое описание ошибок из .def файла
   {
-    #define ERRORS_LIST(error_id, description) [error_id] = description,        // X-MACROS
+    #define ERRORS_LIST(error_type, error_id, description) [error_id] = description,        // X-MACROS
     #include "j_errors_list.def"
     #undef ERRORS_LIST
   };
 
-  bool unhandled_errors [J_ERRORS_AMOUNT] = {false};                            // необработанные ошибки
+  static const ErrorsTypes error_type_arr[J_ERRORS_AMOUNT] =
+  {
+    #define ERRORS_LIST(error_type, error_id, description) [error_id] = error_type,        // X-MACROS
+    #include "j_errors_list.def"
+    #undef ERRORS_LIST
+  };
+
+  static bool unhandled_errors [J_ERRORS_AMOUNT] = {false};                     // необработанные ошибки
   static unsigned short error_counters_arr [J_ERRORS_AMOUNT] = {0};             // количество ошибок за всё время работы программы
 
   static bool is_error_id_correct(unsigned short error_id)
@@ -16,8 +23,26 @@
     {
       return true;
     }
-    raise_error(ERROR_ID_WRONG_ERROR_ID);
+    raise_error(ERR_ID__WRONG_ERR_ID);
     return false;
+  }
+
+  ErrorsTypes get_error_type(unsigned short error_id)
+  {
+    is_error_id_correct(error_id);
+    return error_type_arr[error_id];
+  }
+
+  bool get_unhandled_error_flag(unsigned short error_id)
+  {
+    is_error_id_correct(error_id);
+    return unhandled_errors[error_id];
+  }
+  
+  void reset_unhandled_error_flag(unsigned short error_id)
+  {
+    is_error_id_correct(error_id);
+    unhandled_errors[error_id] = false;
   }
 
   const char* get_error_description_ptr(unsigned short error_id)
@@ -26,7 +51,7 @@
     {
       return error_description_ptr[error_id];
     }
-    return error_description_ptr[ERROR_ID_WRONG_ERROR_ID];                      // ОШИБКА - возвращаем рабочий указатель на другую ошибку, но такого быть не должно
+    return error_description_ptr[ERR_ID__WRONG_ERR_ID];                      // ОШИБКА - возвращаем рабочий указатель на другую ошибку, но такого быть не должно
   }
 
   unsigned short get_error_counter(unsigned short error_id)

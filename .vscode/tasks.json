@@ -7,11 +7,20 @@
       "type": "shell",
       "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
       "args": [
-        "-fdiagnostics-color=always",
-        "-g",
-        "-Wall",
-        "-Wextra",
-        "-Werror",
+        "-fdiagnostics-color=always",            
+        "-g",                      // включить отладочную информацию в выходной исполняемый файл.
+        
+        "-Wall",                   // включает все распространенные предупреждения (warnings),
+                                   // которые компилятор GCC может обнаружить.
+                                   // Эти предупреждения часто указывают на потенциальные ошибки, сомнительные
+                                   // конструкции или неоптимальный код. По сути, это уже форма статического анализа.
+
+        "-Wextra",                 // включает дополнительные предупреждения, которые не охватываются W-all. 
+                                   // Он еще больше расширяет объем статического анализа, выполняемого компилятором.
+
+        "-Werror",                 // превращает все предупреждения в ошибки. Это очень строгий, но эффективный подход,
+                                   // который заставляет вас исправлять каждую потенциальную проблему, обнаруженную компилятором,
+                                   // прежде чем код сможет скомпилироваться.
         // 0_core
           // j_errors
             "-I${workspaceFolder}/firmware/0_core/j_errors/include",
@@ -30,7 +39,7 @@
           // j_errors_writer
             "-I${workspaceFolder}/firmware/2_services/j_errors_writer/include",
               "${workspaceFolder}/firmware/2_services/j_errors_writer/src/j_errors_writer.c",
-             //"${workspaceFolder}/firmware/2_services/j_errors_writer/test/j_errors_writer_test.c",
+              "${workspaceFolder}/firmware/2_services/j_errors_writer/test/j_errors_writer_test.c",
              //"${workspaceFolder}/firmware/2_services/j_errors_writer/example/j_errors_writer_example.c",
 
         // 3_managers
@@ -39,7 +48,9 @@
           "-I${workspaceFolder}/firmware/4_application/include",
             "${workspaceFolder}/firmware/4_application/test/run_all_tests.c",
 
-        "-o",
+        "-o",                      // Этот флаг используется для указания имени выходного файла, который будет создан компилятором.
+                                   // После "-o" указывается имя файла.
+
         "${workspaceFolder}/bin/${fileBasenameNoExtension}.exe"
       ],
       "options": {

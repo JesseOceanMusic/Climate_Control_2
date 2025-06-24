@@ -7,7 +7,7 @@
     {
       Sleep(2000);
 
-      raise_error(ERROR_ID_UNDEFINED);
+      raise_error(ERR_ID__UNDEFINED);
 
       printf("\n\nНЕОБРАБОТАННЫЕ ОШИБКИ:\n\n");
       bool state = true;

@@ -7,7 +7,8 @@
 
   int main()
   { 
-    raise_error(ERROR_ID_UNDEFINED);
+    raise_error(ERR_ID__UNDEFINED);
+    raise_error(ERR_ID__NULL_IN_BUFFER);
     if (has_unhandled_errors() == true)
     {
       printf("ERRORS:\n");

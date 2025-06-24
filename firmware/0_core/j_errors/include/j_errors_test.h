@@ -1,5 +1,6 @@
-#include "j_errors.h"
-#include <stdio.h>
-#include <assert.h>
+#pragma once
+  #include <stdio.h>
+  #include <assert.h>
+  #include "j_errors.h"
 
-void j_errors_test();
+  void j_errors_test();

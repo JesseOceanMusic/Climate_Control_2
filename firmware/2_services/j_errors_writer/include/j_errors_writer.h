@@ -4,18 +4,23 @@
   #include <stdbool.h>
   #include <string.h>                                                           // для strlen()
 
-  /*
-    1. Хранит в себе структуру и массив буфера для ошибок
-    2. Записывает в лог текущие ошибки.
-    3. Записывает в лог ошибки за всё время.
-    4. Возвращает структуру со стейтом и указателем на массив.
-  */
+  #define BUFFER_FOR_ERRORS_SIZE 128
+  
+  enum
+  {
+    ERRORS_WRITER__CUR_TASK__NONE,
+    ERRORS_WRITER__CUR_TASK__WRITE_ALL_ERRORS,
+    ERRORS_WRITER__CUR_TASK__WRITE_UNHANDLED_ERRORS,
+    ERRORS_WRITER__CUR_TASK__COMPLETE,
+    ERRORS_WRITER__CUR_TASK__ERROR,
+  };
 
   struct ErrorsBufferInfo
   {
     char *arr_ptr;
-    bool is_errors_writer_written_anything;
+    char state;
   };
 
-  void write_unhandled_errors_to_buffer(struct ErrorsBufferInfo *errorsBufferInfo);
-  void write_all_errors_to_buffer(struct ErrorsBufferInfo *errorsBufferInfo);
+  void errors_writer__write_next_part(struct ErrorsBufferInfo *errorsBufferInfo);  
+  void errors_writer__set_task__all_errors(ErrorsTypes handle_this_type);
+  void errors_writer__set_task__unhandled_errors(ErrorsTypes handle_this_type);

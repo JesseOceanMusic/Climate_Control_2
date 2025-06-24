@@ -7,6 +7,14 @@
     "j_errors.h": "c",
     "j_errors_test.h": "c",
     "j_buffer.h": "c",
-    "j_buffer_test.h": "c"
+    "j_buffer_test.h": "c",
+    "assert.h": "c",
+    "j_errors_writer_test.h": "c",
+    "j_errors_writer.h": "c",
+    "bit": "c",
+    "compare": "c",
+    "limits": "c",
+    "new": "c",
+    "string.h": "c"
   }
 }
