@@ -39,14 +39,6 @@ void j_errors_test()
     assert(get_error_counter(J_ERRORS_AMOUNT) == UNSIGNED_SHORT_BAD_RETURN_55555);
     printf("  PASS: Отправка Невалидного ID (больше J_ERRORS_AMOUNT).\n");
 
-  // Тест сброса ошибок
-    for(int id = 0; id < J_ERRORS_AMOUNT; id++)
-    {
-      reset_unhandled_error_flag(id);
-    }
-    assert(has_unhandled_errors() == false);
-    printf("  PASS: Сброс ошибок через цикл.\n");
-
   // Тест переполнения
     for(int i = 0; i < J_UNSIGNED_SHORT_MAX + 1000; i++)
     {
@@ -54,6 +46,27 @@ void j_errors_test()
     }
     assert(get_error_counter(VALID_ID) == J_UNSIGNED_SHORT_MAX);
     printf("  PASS: Переполнение буфера.\n");
+
+  // Тест сброса ошибок
+    for(int id = 0; id < J_ERRORS_AMOUNT; id++)
+    {
+      reset_error_counter(id);
+      assert(get_error_counter(id) == false);
+      reset_unhandled_error_flag(id);
+    }
+    assert(has_unhandled_errors() == false);
+    printf("  PASS: Сброс ошибок через цикл.\n");
+
+  // Тест типов
+    for(int id = 0; id < J_ERRORS_AMOUNT; id++)
+    {
+      ErrorsTypes testType = get_error_type(id);
+      raise_error(id);
+      assert(has_unhandled_errors_type(testType) == true);
+      reset_error_counter(id);
+      reset_unhandled_error_flag(id);
+    }
+    printf("  PASS: Типы ошибок.\n");
 
   printf("j_errors_test: ВСЕ ТЕСТЫ УСПЕШНО ПРОЙДЕНЫ!\n\n");
 }

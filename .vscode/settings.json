@@ -15,6 +15,7 @@
     "compare": "c",
     "limits": "c",
     "new": "c",
-    "string.h": "c"
+    "string.h": "c",
+    "type_traits": "c"
   }
 }

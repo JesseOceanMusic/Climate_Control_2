@@ -103,4 +103,11 @@ void j_buffer_test()
     printf("  PASS: Обработка NULL указателя buffer_size_left().\n");
     
   printf("j_buffer_test: ВСЕ ТЕСТЫ УСПЕШНО ПРОЙДЕНЫ!\n\n");
+
+  // Сброс ошибок
+    for(int id = 0; id < J_ERRORS_AMOUNT; id++)
+    {
+      reset_error_counter(id);
+      reset_unhandled_error_flag(id);
+    }
 }

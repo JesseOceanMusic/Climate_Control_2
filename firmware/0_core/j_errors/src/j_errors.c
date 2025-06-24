@@ -29,20 +29,28 @@
 
   ErrorsTypes get_error_type(unsigned short error_id)
   {
-    is_error_id_correct(error_id);
-    return error_type_arr[error_id];
+    if(is_error_id_correct(error_id) == true)
+    {
+      return error_type_arr[error_id];    
+    }
+    return ERR_TYPE__FATAL;  // ОШИБКА, НО ЧТО-ТО ВЕРНУТЬ НАДО!
   }
 
   bool get_unhandled_error_flag(unsigned short error_id)
   {
-    is_error_id_correct(error_id);
-    return unhandled_errors[error_id];
+    if(is_error_id_correct(error_id) == true)
+    {
+      return unhandled_errors[error_id];
+    }
+    return false;  // ОШИБКА, НО ЧТО-ТО ВЕРНУТЬ НАДО!
   }
   
   void reset_unhandled_error_flag(unsigned short error_id)
   {
-    is_error_id_correct(error_id);
-    unhandled_errors[error_id] = false;
+    if(is_error_id_correct(error_id) == true)
+    {
+      unhandled_errors[error_id] = false;
+    }
   }
 
   const char* get_error_description_ptr(unsigned short error_id)
@@ -63,6 +71,14 @@
     return UNSIGNED_SHORT_BAD_RETURN_55555;                                     // ОШИБКА - возвращаем подозрительно симметричное число
   }
 
+  void reset_error_counter(unsigned short error_id)
+  {
+    if(is_error_id_correct(error_id) == true)
+    {
+      error_counters_arr[error_id] = 0;
+    }    
+  }
+
   void raise_error(unsigned short error_id)                                     // поднять флаг ошибки (принимает id)
   {
     if(is_error_id_correct(error_id) == true)
@@ -75,11 +91,23 @@
     }
   }
 
-  bool has_unhandled_errors()                                                   // проверяет, есть ли необработанные ошибки
+  bool has_unhandled_errors()
   {
-    for (int i = 0; i < J_ERRORS_AMOUNT; i++)
+    for (int id = 0; id < J_ERRORS_AMOUNT; id++)
     {
-      if (unhandled_errors[i] == true)
+      if (unhandled_errors[id] == true)
+      {
+        return true;
+      }
+    }
+    return false;    
+  }
+
+  bool has_unhandled_errors_type(ErrorsTypes type)                                                   // проверяет, есть ли необработанные ошибки
+  {
+    for (int id = 0; id < J_ERRORS_AMOUNT; id++)
+    {
+      if (unhandled_errors[id] == true && error_type_arr[id] == type)
       {
         return true;
       }

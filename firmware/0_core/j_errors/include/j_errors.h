@@ -9,7 +9,6 @@
     ERR_TYPE__WARNING,
     ERR_TYPE__ERROR,
     ERR_TYPE__FATAL,
-    ERR_TYPE__ALL,
   } ErrorsTypes;
 
   enum                                                                          // перечисление кодов ошибок
@@ -23,10 +22,13 @@
   static const char ERRORS_HEADER_MESSAGE[] = "ERRORS:\nID/counter/description:\n";
  
   bool has_unhandled_errors();
+  bool has_unhandled_errors_type(ErrorsTypes type);
   void raise_error(unsigned short error_id);
   
   const char* get_error_description_ptr(unsigned short error_id);
+
   unsigned short get_error_counter(unsigned short error_id);
+  void reset_error_counter(unsigned short error_id);
 
   bool get_unhandled_error_flag(unsigned short error_id);
   void reset_unhandled_error_flag(unsigned short error_id);

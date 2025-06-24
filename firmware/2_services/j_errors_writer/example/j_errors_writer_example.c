@@ -11,14 +11,14 @@
 
       printf("\n\nНЕОБРАБОТАННЫЕ ОШИБКИ:\n\n");
       bool state = true;
-      struct ErrorsBufferInfo errorsBufferInfo;
+      struct ErrBufferInfo ErrBufferInfo;
       while(state == true)
       {
-        write_unhandled_errors_to_buffer(&errorsBufferInfo);
-        //printf("%d", errorsBufferInfo.is_errors_writer_written_anything);
-        printf("%s", errorsBufferInfo.arr_ptr);
+        write_unhandled_errors_to_buffer(&ErrBufferInfo);
+        //printf("%d", ErrBufferInfo.is_errors_writer_written_anything);
+        printf("%s", ErrBufferInfo.arr_ptr);
 
-        state = errorsBufferInfo.is_errors_writer_written_anything;
+        state = ErrBufferInfo.is_errors_writer_written_anything;
       }
 
       Sleep(2000);
@@ -26,11 +26,11 @@
       state = true;
       while(state == true)
       {
-        write_all_errors_to_buffer(&errorsBufferInfo);
-        //printf("%d", errorsBufferInfo.is_errors_writer_written_anything);
-        printf("%s", errorsBufferInfo.arr_ptr);
+        write_all_errors_to_buffer(&ErrBufferInfo);
+        //printf("%d", ErrBufferInfo.is_errors_writer_written_anything);
+        printf("%s", ErrBufferInfo.arr_ptr);
         
-        state = errorsBufferInfo.is_errors_writer_written_anything;
+        state = ErrBufferInfo.is_errors_writer_written_anything;
       }      
     }
     return 0;
