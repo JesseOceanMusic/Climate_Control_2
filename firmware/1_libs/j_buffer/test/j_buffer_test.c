@@ -53,59 +53,59 @@ void j_buffer_test()
     // Пытаемся записать строку, которая переполнит буфер
     assert(buffer_write_char(&charBuffer, "THIS WILL OVERFLOW THE BUFFER") == false);
     assert(strcmp(charBuffer.arr_ptr, ARRAY_IS_FULL_FOOTER_MSG) == 0);
-    assert(has_unhandled_errors() == true);
+    assert(has_err_unhandled_errors() == true);
     assert(charBuffer.offset == charBuffer.arr_size - 1);
     printf("  PASS: Переполнение буфера.\n");
 
   // Тесты с NULL указателями
     // Сброс ошибок для тестов с NULL
-      for(int id = 0; id < J_ERRORS_AMOUNT; id++)
+      for(int id = 0; id < ERR_ID__AMOUNT; id++)
       {
         reset_unhandled_error_flag(id);
       }
-      assert(has_unhandled_errors() == false);
+      assert(has_err_unhandled_errors() == false);
 
     assert(buffer_clear(&charBuffer) == true);
 
     assert(buffer_write_char(NULL, "test") == false);
-    assert(has_unhandled_errors() == true);
+    assert(has_err_unhandled_errors() == true);
     assert(get_unhandled_error_flag(ERR_ID__NULL_IN_BUFFER) == true);
     printf("  PASS: Обработка NULL указателя buffer_write_char().\n");
 
     reset_unhandled_error_flag(ERR_ID__NULL_IN_BUFFER); // Сброс ошибки
     assert(buffer_write_int(NULL, 123) == false);
-    assert(has_unhandled_errors() == true);
+    assert(has_err_unhandled_errors() == true);
     assert(get_unhandled_error_flag(ERR_ID__NULL_IN_BUFFER) == true);
     printf("  PASS: Обработка NULL указателя buffer_write_int().\n");
 
     assert(buffer_write_char(NULL, "test") == false); // Сброс ошибки
     assert(buffer_write_float(NULL, 4.56) == false);
-    assert(has_unhandled_errors() == true);
+    assert(has_err_unhandled_errors() == true);
     assert(get_unhandled_error_flag(ERR_ID__NULL_IN_BUFFER) == true);
     printf("  PASS: Обработка NULL указателя buffer_write_float().\n");
 
     assert(buffer_write_char(NULL, "test") == false); // Сброс ошибки    
     assert(buffer_clear(NULL) == false);
-    assert(has_unhandled_errors() == true);
+    assert(has_err_unhandled_errors() == true);
     assert(get_unhandled_error_flag(ERR_ID__NULL_IN_BUFFER) == true);
     printf("  PASS: Обработка NULL указателя buffer_clear().\n");
     
     assert(buffer_write_char(NULL, "test") == false); // Сброс ошибки
     assert(is_buffer_empty(NULL) == false); // При NULL должен вернуть false и поднять ошибку
-    assert(has_unhandled_errors() == true);
+    assert(has_err_unhandled_errors() == true);
     assert(get_unhandled_error_flag(ERR_ID__NULL_IN_BUFFER) == true);
     printf("  PASS: Обработка NULL is_buffer_empty().\n");
 
     assert(buffer_write_char(NULL, "test") == false); // Сброс ошибки
     assert(buffer_size_left(NULL) == 0); // При NULL должен вернуть 0 и поднять ошибку
-    assert(has_unhandled_errors() == true);
+    assert(has_err_unhandled_errors() == true);
     assert(get_unhandled_error_flag(ERR_ID__NULL_IN_BUFFER) == true);
     printf("  PASS: Обработка NULL указателя buffer_size_left().\n");
     
   printf("j_buffer_test: ВСЕ ТЕСТЫ УСПЕШНО ПРОЙДЕНЫ!\n\n");
 
   // Сброс ошибок
-    for(int id = 0; id < J_ERRORS_AMOUNT; id++)
+    for(int id = 0; id < ERR_ID__AMOUNT; id++)
     {
       reset_error_counter(id);
       reset_unhandled_error_flag(id);

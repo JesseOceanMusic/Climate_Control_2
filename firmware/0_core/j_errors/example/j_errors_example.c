@@ -7,21 +7,11 @@
 
   int main()
   { 
-    raise_error(ERR_ID__UNDEFINED);
-    raise_error(ERR_ID__NULL_IN_BUFFER);
-    if (has_unhandled_errors() == true)
+    err_raise_error(ERR_ID__UNDEFINED);
+    err_raise_error(ERR_ID__NULL_IN_BUFFER);
+    if (err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == true)
     {
-      printf("ERRORS:\n");
-      printf("id/counter/description\n");
-      for (int id = 0; id < J_ERRORS_AMOUNT; id++)
-      {
-        if (get_error_counter(id) > 0)
-        {
-          printf("%d/", id);
-          printf("%d/", get_error_counter(id));
-          printf("%s\n", get_error_description_ptr(id));
-        }
-      }
+      printf("%s", ERRORS_HEADER_MESSAGE);
     }
     return 0;
   }

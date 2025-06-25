@@ -1,40 +1,39 @@
 #pragma once
   #include <stdbool.h>
   #define J_UNSIGNED_SHORT_MAX 65535
-  #define UNSIGNED_SHORT_BAD_RETURN_55555 55555                                 // чтобы было видно в отчете подозрительно симметричное число
 
   typedef enum
   {
-    ERR_TYPE__ALERT,
+    ERR_TYPE__ANY_TYPE = 0,  // Должен быть первым! Должен быть 0 для тестов! // Фильтр для поиска ошибок с любым типом //
+    ERR_TYPE__ALERT,          
     ERR_TYPE__WARNING,
     ERR_TYPE__ERROR,
     ERR_TYPE__FATAL,
-  } ErrorsTypes;
+    ERR_TYPE__AMOUNT,        // ДОЛЖЕН БЫТЬ ПОСЛЕДНИМ! // Количество Типов
+  } ErrType;
 
-  enum                                                                          // перечисление кодов ошибок
+  typedef enum                                                                  // перечисление кодов ошибок
   {
     #define ERRORS_LIST(error_type, error_id, description) error_id,            // X-MACROS
     #include "j_errors_list.def"                                                // в папке "j_errors/include"
     #undef  ERRORS_LIST
-    J_ERRORS_AMOUNT,
+    ERR_ID__AMOUNT,          // ДОЛЖЕН БЫТЬ ПОСЛЕДНИМ! // Количество Ошибок
+  }ErrId;
+
+  struct ErrInfo
+  {
+    bool was_id_correct;
+    ErrId id;
+    ErrType type;
+    const char* description_ptr; // const = указатель на неизменяемые данные, сам указатель менять можно.
+    bool unhandled;
+    unsigned short counter_cur;
+    unsigned short counter_last;
   };
 
   static const char ERRORS_HEADER_MESSAGE[] = "ERRORS:\nID/counter/description:\n";
  
-  bool has_unhandled_errors();
-  bool has_unhandled_errors_type(ErrorsTypes type);
-  void raise_error(unsigned short error_id);
-  
-  const char* get_error_description_ptr(unsigned short error_id);
-
-  unsigned short get_error_counter(unsigned short error_id);
-  void reset_error_counter(unsigned short error_id);
-
-  bool get_unhandled_error_flag(unsigned short error_id);
-  void reset_unhandled_error_flag(unsigned short error_id);
-
-  ErrorsTypes get_error_type(unsigned short error_id);
-  
-
-
-  
+  bool           err_has_unhandled_errors  (ErrType type);
+  bool           err_raise_error           (ErrId error_id);
+  struct ErrInfo err_get_info              (ErrId error_id);                    // возвращаем именно по значению, а не по указателю. безопаснее. разница в скорости минимальна.
+  bool           err_reset_counter_and_flag(ErrId error_id);

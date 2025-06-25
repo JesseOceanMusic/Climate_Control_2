@@ -14,7 +14,7 @@
       struct ErrBufferInfo ErrBufferInfo;
       while(state == true)
       {
-        write_unhandled_errors_to_buffer(&ErrBufferInfo);
+        write_err_unhandled_errors_to_buffer(&ErrBufferInfo);
         //printf("%d", ErrBufferInfo.is_errors_writer_written_anything);
         printf("%s", ErrBufferInfo.arr_ptr);
 

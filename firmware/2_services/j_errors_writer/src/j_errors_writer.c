@@ -23,7 +23,7 @@
     buffer_write_char(&charBufferForErrors, "/");
     buffer_write_int(&charBufferForErrors, get_error_counter(id));              // counter
     buffer_write_char(&charBufferForErrors, "/");
-    buffer_write_char(&charBufferForErrors, get_error_description_ptr(id));     // description
+    buffer_write_char(&charBufferForErrors, get_err_description_ptr_arr(id));     // description
     buffer_write_char(&charBufferForErrors, "\n");
   }
 
@@ -32,7 +32,7 @@
     unsigned int needed_size = 1 + snprintf(NULL, 0, "%d/%d/%s\n", 
                                   id, 
                                   get_error_counter(id), 
-                                  get_error_description_ptr(id));
+                                  get_err_description_ptr_arr(id));
                                   
     if (buffer_size_left(&charBufferForErrors) < needed_size)
     {
@@ -43,28 +43,28 @@
 
   static bool is_there_any_error_with_cur_type()
   {
-    for(int id = write_errors_id_itterator; id < J_ERRORS_AMOUNT; id++)
+    for(int id = 0; id < ERR_ID__AMOUNT; id++)
     {
       if(get_error_type(id) == errWriterErrBufferInfo.type_filter)
       {
-        return true; // Ошибки с нужным фильтром существуют!
+        return true;
       }
     }
-    return false; // Ошибок с таким фильром нету
+    raise_error(ERR_ID__NO_ERR_WITH_THIS_TYPE);
+    return false;
   }
 
   static void fill_err_buffer()
   {
-    // UNHANDLED ERRORS - Проверяем есть ли ошибки для записи нужного типа
-      if(errWriterErrBufferInfo.state == ERR_WRITER__CUR_TASK__WRITE_UNHANDLED_ERRORS)
+    // if UNHANDLED ERRORS - Проверяем есть ли ошибки для записи нужного типа
+      if(errWriterErrBufferInfo.state == ERR_WRITER__CUR_TASK__WRITE_err_unhandled_errors)
       {
-        if(has_unhandled_errors(errWriterErrBufferInfo.type_filter) == false)
+        if(has_err_unhandled_errors(errWriterErrBufferInfo.type_filter) == false)
         {
           errWriterErrBufferInfo.state = ERR_WRITER__CUR_TASK__COMPLETE;
           return; // Ошибок с таким фильром не было
         }
       }
-
 
     // ALL ERRORS - Проверяем есть ли вообще ошибки с таким типом
       if(errWriterErrBufferInfo.state == ERR_WRITER__CUR_TASK__WRITE_ALL_ERRORS)
@@ -74,8 +74,7 @@
           errWriterErrBufferInfo.state = ERR_WRITER__CUR_TASK__COMPLETE;
           return; // Ошибок с таким фильром не было              
         }
-      }
-
+      }      
     // Добавляем заголовок.
       if(write_errors_id_itterator == -1) 
       {
@@ -107,7 +106,7 @@
         }        
       
         // UNHANDLED ERRORS
-        if (errWriterErrBufferInfo.state == ERR_WRITER__CUR_TASK__WRITE_UNHANDLED_ERRORS)
+        if (errWriterErrBufferInfo.state == ERR_WRITER__CUR_TASK__WRITE_err_unhandled_errors)
         {
           if(get_unhandled_error_flag(write_errors_id_itterator) == true)
           {
@@ -118,7 +117,7 @@
       }
 
     // Все ошибки были записаны
-      if(write_errors_id_itterator == J_ERRORS_AMOUNT - 1)
+      if(write_errors_id_itterator == ERR_ID__AMOUNT - 1)
       {
         errWriterErrBufferInfo.state = ERR_WRITER__CUR_TASK__COMPLETE;
       }
@@ -128,7 +127,7 @@
   ErrBufferInfo err_writer__write_next_part()
   {    
     if(errWriterErrBufferInfo.state == ERR_WRITER__CUR_TASK__WRITE_ALL_ERRORS ||
-       errWriterErrBufferInfo.state == ERR_WRITER__CUR_TASK__WRITE_UNHANDLED_ERRORS)
+       errWriterErrBufferInfo.state == ERR_WRITER__CUR_TASK__WRITE_err_unhandled_errors)
     {
         // Отчищаем буфер
           buffer_clear(&charBufferForErrors);
@@ -138,7 +137,7 @@
     return errWriterErrBufferInfo;
   }
 
-  ErrBufferInfo err_writer__set_task__all_errors(ErrorsTypes handle_this_type)
+  ErrBufferInfo err_writer__set_task__all_errors(ErrType handle_this_type)
   {
     errWriterErrBufferInfo.type_filter = handle_this_type;
     errWriterErrBufferInfo.state = ERR_WRITER__CUR_TASK__WRITE_ALL_ERRORS;
@@ -146,10 +145,10 @@
     return errWriterErrBufferInfo;
   }
 
-  ErrBufferInfo err_writer__set_task__unhandled_errors(ErrorsTypes handle_this_type)
+  ErrBufferInfo err_writer__set_task__err_unhandled_errors(ErrType handle_this_type)
   {
     errWriterErrBufferInfo.type_filter = handle_this_type;
-    errWriterErrBufferInfo.state = ERR_WRITER__CUR_TASK__WRITE_UNHANDLED_ERRORS;
+    errWriterErrBufferInfo.state = ERR_WRITER__CUR_TASK__WRITE_err_unhandled_errors;
     write_errors_id_itterator = -1;                                              // Сбрасываем итератор
     return errWriterErrBufferInfo;
   }

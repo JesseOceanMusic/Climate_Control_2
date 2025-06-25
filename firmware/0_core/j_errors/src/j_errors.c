@@ -1,116 +1,126 @@
 #include "j_errors.h"
 
-  static const char *error_description_ptr [J_ERRORS_AMOUNT] =                  // указатели на текстовое описание ошибок из .def файла
+  static const char *err_description_ptr_arr [ERR_ID__AMOUNT] =                 // указатели на текстовое описание ошибок из .def файла
   {
     #define ERRORS_LIST(error_type, error_id, description) [error_id] = description,        // X-MACROS
     #include "j_errors_list.def"
     #undef ERRORS_LIST
   };
 
-  static const ErrorsTypes error_type_arr[J_ERRORS_AMOUNT] =
+
+  static const ErrType err_type_arr[ERR_ID__AMOUNT] =
   {
     #define ERRORS_LIST(error_type, error_id, description) [error_id] = error_type,        // X-MACROS
     #include "j_errors_list.def"
     #undef ERRORS_LIST
   };
 
-  static bool unhandled_errors [J_ERRORS_AMOUNT] = {false};                     // необработанные ошибки
-  static unsigned short error_counters_arr [J_ERRORS_AMOUNT] = {0};             // количество ошибок за всё время работы программы
+  static bool           err_unhandled_errors [ERR_ID__AMOUNT] = {false};        // необработанные ошибки
+  static unsigned short err_counter_cur_arr  [ERR_ID__AMOUNT] = {0};            // количество ошибок за всё время работы программы
+  static unsigned short err_counter_last_arr [ERR_ID__AMOUNT] = {0};            // кол-во ошибок до сброса
 
-  static bool is_error_id_correct(unsigned short error_id)
+  static struct ErrInfo errInfo =
   {
-    if(error_id < J_ERRORS_AMOUNT)
+    .was_id_correct  = false,
+    .id              = ERR_ID__WRONG_ERR_ID,
+    .type            = ERR_TYPE__FATAL,
+    .description_ptr = "errInfo_ini",
+    .unhandled       = false,
+    .counter_cur     = 0,
+    .counter_last    = 0,
+  };  
+
+  static bool is_err_id_correct(ErrId error_id)
+  {
+    if(error_id != ERR_ID__AMOUNT)
     {
       return true;
     }
-    raise_error(ERR_ID__WRONG_ERR_ID);
+    if (error_id != ERR_ID__WRONG_ERR_ID)  // Защита от рекурсии
+    {
+      err_raise_error(ERR_ID__WRONG_ERR_ID);
+    }
     return false;
   }
 
-  ErrorsTypes get_error_type(unsigned short error_id)
+  static bool is_err_type_correct(ErrType type)
   {
-    if(is_error_id_correct(error_id) == true)
+    if(type != ERR_TYPE__AMOUNT)
     {
-      return error_type_arr[error_id];    
+      return true;
     }
-    return ERR_TYPE__FATAL;  // ОШИБКА, НО ЧТО-ТО ВЕРНУТЬ НАДО!
+    err_raise_error(ERR_ID__WRONG_ERR_TYPE);
+    return false;
   }
 
-  bool get_unhandled_error_flag(unsigned short error_id)
+  bool err_raise_error(ErrId error_id)                                          // поднять флаг ошибки (принимает id)
   {
-    if(is_error_id_correct(error_id) == true)
+    if(is_err_id_correct(error_id) == true)
     {
-      return unhandled_errors[error_id];
-    }
-    return false;  // ОШИБКА, НО ЧТО-ТО ВЕРНУТЬ НАДО!
-  }
-  
-  void reset_unhandled_error_flag(unsigned short error_id)
-  {
-    if(is_error_id_correct(error_id) == true)
-    {
-      unhandled_errors[error_id] = false;
-    }
-  }
-
-  const char* get_error_description_ptr(unsigned short error_id)
-  {
-    if(is_error_id_correct(error_id) == true)
-    {
-      return error_description_ptr[error_id];
-    }
-    return error_description_ptr[ERR_ID__WRONG_ERR_ID];                      // ОШИБКА - возвращаем рабочий указатель на другую ошибку, но такого быть не должно
-  }
-
-  unsigned short get_error_counter(unsigned short error_id)
-  {
-    if(is_error_id_correct(error_id) == true)
-    {
-      return error_counters_arr[error_id];
-    }
-    return UNSIGNED_SHORT_BAD_RETURN_55555;                                     // ОШИБКА - возвращаем подозрительно симметричное число
-  }
-
-  void reset_error_counter(unsigned short error_id)
-  {
-    if(is_error_id_correct(error_id) == true)
-    {
-      error_counters_arr[error_id] = 0;
-    }    
-  }
-
-  void raise_error(unsigned short error_id)                                     // поднять флаг ошибки (принимает id)
-  {
-    if(is_error_id_correct(error_id) == true)
-    {
-      unhandled_errors[error_id] = true;
-      if(error_counters_arr[error_id] < J_UNSIGNED_SHORT_MAX)
+      err_unhandled_errors[error_id] = true;
+      if(err_counter_cur_arr[error_id] < J_UNSIGNED_SHORT_MAX)
       {
-        error_counters_arr[error_id]++;
+        err_counter_cur_arr[error_id]++;
       }
+      return true;
     }
+
+    return false;
   }
 
-  bool has_unhandled_errors()
+  struct ErrInfo err_get_info(ErrId error_id)
   {
-    for (int id = 0; id < J_ERRORS_AMOUNT; id++)
+    if(is_err_id_correct(error_id) == true)
     {
-      if (unhandled_errors[id] == true)
-      {
-        return true;
-      }
+      errInfo.was_id_correct  = true;
+      errInfo.id              = error_id;
+      errInfo.type            = err_type_arr           [error_id];
+      errInfo.description_ptr = err_description_ptr_arr[error_id];
+      errInfo.unhandled       = err_unhandled_errors   [error_id];
+      errInfo.counter_cur     = err_counter_cur_arr    [error_id];
+      errInfo.counter_last    = err_counter_last_arr   [error_id];
+      return errInfo;
     }
-    return false;    
+
+    errInfo.was_id_correct = false;
+    return errInfo;
   }
 
-  bool has_unhandled_errors_type(ErrorsTypes type)                                                   // проверяет, есть ли необработанные ошибки
+  bool err_reset_counter_and_flag(ErrId error_id)
   {
-    for (int id = 0; id < J_ERRORS_AMOUNT; id++)
+    if(is_err_id_correct(error_id) == true)
     {
-      if (unhandled_errors[id] == true && error_type_arr[id] == type)
+      err_unhandled_errors[error_id] = false;
+      err_counter_last_arr[error_id] = err_counter_cur_arr[error_id];
+      return true;
+    }
+    return false;
+  }
+
+  bool err_has_unhandled_errors(ErrType type)
+  {
+    if(is_err_type_correct(type) == true)
+    {
+      
+      for(int id = 0; id < ERR_ID__AMOUNT; id++)
       {
-        return true;
+        if(err_unhandled_errors[id] == true)
+        {
+          if(type == ERR_TYPE__ANY_TYPE || err_type_arr[id] == type)
+          {
+            return true;  
+          }
+        }
       }
     }
     return false;
   }
+
+  // тесты
+    _Static_assert(sizeof(err_description_ptr_arr)/sizeof(char*) == ERR_ID__AMOUNT, "Mismatch between ERR_ID__AMOUNT and err_description_ptr_arr");
+    _Static_assert(sizeof(err_type_arr)/sizeof(ErrType)          == ERR_ID__AMOUNT, "Mismatch between ERR_ID__AMOUNT and err_type_arr");
+
+    _Static_assert(ERR_ID__WRONG_ERR_ID   < ERR_ID__AMOUNT,   "ERR_ID__WRONG_ERR_ID must be defined in j_errors_list.def!");
+    _Static_assert(ERR_ID__WRONG_ERR_TYPE < ERR_ID__AMOUNT,   "ERR_ID__WRONG_ERR_TYPE must be defined in j_errors_list.def!");
+    _Static_assert(ERR_TYPE__ANY_TYPE     < ERR_TYPE__AMOUNT, "ERR_TYPE__ANY_TYPE must be defined in j_errors_list.def!");
+    _Static_assert(ERR_TYPE__ANY_TYPE     == 0,               "ERR_TYPE__ANY_TYPE must be 0!");

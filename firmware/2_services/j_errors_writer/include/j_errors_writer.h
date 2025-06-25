@@ -10,7 +10,7 @@
   {
     ERR_WRITER__CUR_TASK__NONE,
     ERR_WRITER__CUR_TASK__WRITE_ALL_ERRORS,
-    ERR_WRITER__CUR_TASK__WRITE_UNHANDLED_ERRORS,
+    ERR_WRITER__CUR_TASK__WRITE_err_unhandled_errors,
     ERR_WRITER__CUR_TASK__COMPLETE,
     ERR_WRITER__CUR_TASK__ERROR,
   } ErrWriterState;
@@ -19,10 +19,10 @@
   {
     char *arr_ptr;
     ErrWriterState state;
-    ErrorsTypes type_filter;
+    ErrType type_filter;
   } ErrBufferInfo;
 
   ErrBufferInfo err_writer__write_next_part();  
-  ErrBufferInfo err_writer__set_task__all_errors(ErrorsTypes handle_this_type);
-  ErrBufferInfo err_writer__set_task__unhandled_errors(ErrorsTypes handle_this_type);
+  ErrBufferInfo err_writer__set_task__all_errors(ErrType handle_this_type);
+  ErrBufferInfo err_writer__set_task__err_unhandled_errors(ErrType handle_this_type);
   ErrBufferInfo err_writer__get_status();
