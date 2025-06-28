@@ -1,0 +1,11 @@
+// 'c_errors.c'
+ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__UNDEFINED,               "undefined/test error") 
+ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_ID,            "err << wrong id")
+ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_TYPE,          "err << wrong type")
+
+// 'c_buffer.c'
+ERRORS_LIST(ERR_TYPE__FATAL,   ERR_ID__BUF_RECEIVED_NULL,       "buf << NULL")
+ERRORS_LIST(ERR_TYPE__FATAL,   ERR_ID__BUF_BAD_FLOAT_PRECISION, "buf << bad float precision")
+
+// 'c_errors_writer.c'
+ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__ERR_WR_UNLISTED_ERROR_TYPE, "err_wr << unlisted error type")

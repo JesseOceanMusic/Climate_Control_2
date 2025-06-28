@@ -3,7 +3,11 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/firmware/**"
+                "${workspaceFolder}/firmware/0_core/c_errors/include",
+                "${workspaceFolder}/firmware/1_libs/c_buffer/include",
+                "${workspaceFolder}/firmware/2_services/c_errors_writer/include", // vs code в глаза долбится и не видит этот файл без подсказки
+                "${workspaceFolder}/firmware/4_application/include"
+                //"${workspaceFolder}/firmware/**"
             ],
             "defines": [
                 "_DEBUG",

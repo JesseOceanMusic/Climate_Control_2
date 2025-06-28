@@ -21,26 +21,32 @@
         "-Werror",                 // превращает все предупреждения в ошибки. Это очень строгий, но эффективный подход,
                                    // который заставляет вас исправлять каждую потенциальную проблему, обнаруженную компилятором,
                                    // прежде чем код сможет скомпилироваться.
+        
+
+        // !!!                           
+        "-DTURN_ON_TEST_FEATURES", // аналог макроса '#define TURN_ON_TEST_FEATURES'
+        // !!!
+
         // 0_core
-          // j_errors
-            "-I${workspaceFolder}/firmware/0_core/j_errors/include",
-              "${workspaceFolder}/firmware/0_core/j_errors/src/j_errors.c",
-              "${workspaceFolder}/firmware/0_core/j_errors/test/j_errors_test.c",
-              //"${workspaceFolder}/firmware/0_core/j_errors/example/j_errors_example.c",
+          // c_errors
+            "-I${workspaceFolder}/firmware/0_core/c_errors/include",
+              "${workspaceFolder}/firmware/0_core/c_errors/src/c_errors.c",
+              "${workspaceFolder}/firmware/0_core/c_errors/test/c_errors_test.c",
+              //"${workspaceFolder}/firmware/0_core/c_errors/example/c_errors_example.c",
 
         // 1_libs
-          // j_buffer
-            //"-I${workspaceFolder}/firmware/1_libs/j_buffer/include",
-              //"${workspaceFolder}/firmware/1_libs/j_buffer/src/j_buffer.c",
-              //"${workspaceFolder}/firmware/1_libs/j_buffer/test/j_buffer_test.c",
-              //"${workspaceFolder}/firmware/1_libs/j_buffer/example/j_buffer_example.c",
+          // c_buffer
+            "-I${workspaceFolder}/firmware/1_libs/c_buffer/include",
+              "${workspaceFolder}/firmware/1_libs/c_buffer/src/c_buffer.c",
+              "${workspaceFolder}/firmware/1_libs/c_buffer/test/c_buffer_test.c",
+            //  "${workspaceFolder}/firmware/1_libs/c_buffer/example/c_buffer_example.c",
 
         // 2_services
-          // j_errors_writer
-            //"-I${workspaceFolder}/firmware/2_services/j_errors_writer/include",
-             // "${workspaceFolder}/firmware/2_services/j_errors_writer/src/j_errors_writer.c",
-             // "${workspaceFolder}/firmware/2_services/j_errors_writer/test/j_errors_writer_test.c",
-             //"${workspaceFolder}/firmware/2_services/j_errors_writer/example/j_errors_writer_example.c",
+          // c_errors_writer
+          //  "-I${workspaceFolder}/firmware/2_services/c_errors_writer/include",
+          //    "${workspaceFolder}/firmware/2_services/c_errors_writer/src/c_errors_writer.c",
+          //    "${workspaceFolder}/firmware/2_services/c_errors_writer/test/c_errors_writer_test.c",
+             //"${workspaceFolder}/firmware/2_services/c_errors_writer/example/c_errors_writer_example.c",
 
         // 3_managers
 

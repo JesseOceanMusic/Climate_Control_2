@@ -1,7 +1,0 @@
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__WRONG_ERR_ID,          "raise_error(): неправильный ID")
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__WRONG_ERR_TYPE,        "j_errors.c: неправильный тип ошибки")
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__UNDEFINED,             "UNDEFINED ERROR")
-ERRORS_LIST(ERR_TYPE__FATAL,   ERR_ID__NULL_IN_BUFFER,        "buffer.c: NULL")
-ERRORS_LIST(ERR_TYPE__FATAL,   ERR_ID__NULL_IN_ERRORS_WRITER, "err_writer.c: NULL")
-ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__NO_ERR_WITH_THIS_TYPE, "нет ошибок с существующим типом")
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__BUFFER_OVERFILLED,     "buffer.c: буффер переполнен")
