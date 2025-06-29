@@ -1,117 +1,118 @@
 #include "c_errors_writer_test.h"
 
-struct ErrWriterInfo errWriterInfo;
-
-static bool are_those_structs_same(struct ErrWriterInfo str1, struct ErrWriterInfo str2)
-{
-  if(str1.arr_ptr     == str2.arr_ptr ||
-     str1.msg_length  == str2.msg_length ||
-     str1.state       == str2.state ||
-     str1.type_filter == str2.type_filter)
-  {
-    return true;
-  }
-  return false;
-}
-
-static bool is_there_any_error_with_cur_type(ErrType type)
-{
-  struct ErrInfo errInfo;
-  for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
-  {
-    errInfo = err_get_info(id);
-    if(errInfo.type == type)
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
 void c_errors_writer_test()
 {
-  char test_arr[BUFFER_FOR_ERRORS_SIZE * 2];  // больше чем буфер
-  struct ErrInfo errInfo;
+  // создаём буфер (должен быть static и выделятся вне функций, здесь только для теста)
+    #define TEST_BUF_SIZE 1024
+      char char_buffer_arr[TEST_BUF_SIZE];
+      struct BufInfo bufInfo;
+      assert(buf_init(&bufInfo, char_buffer_arr, sizeof(char_buffer_arr)) == true);
+    #undef TEST_BUF_SIZE
+    printf("  PASS: buf_init().\n");
 
-  printf("c_errors_writer_test.c: ЗАПУСК ТЕСТИРОВАНИЯ\n");  
+  // создаём структуру под ошибки и сбрасывает от предыдущих тестов
+    struct ErrInfo errInfo;
+    err_reset_all();
 
-  // проверка размера массива для ошибок
-    unsigned int max_msg_size = 1 + snprintf(NULL, 0, "%s", ERR_HEADER_MESSAGE); 
-    
-    for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
+  // тест NULL
+    assert(err_writer(NULL, ERR_ID__UNDEFINED, ERR_TYPE__ANY_TYPE, true) == false); // отправляем NULL
+    assert(err_get_info(&errInfo, ERR_ID__ERR_WR_RECEIVED_NULL) == true);                             
+    assert(errInfo.counter_unhandled == 1);                                     // проверяем, что ошибка NULL зарегестрированна
+    printf("  PASS: NULL -> err_writer().\n");
+
+  // неправильный id
+    assert(err_writer(&bufInfo, ERR_ID__AMOUNT, ERR_TYPE__ANY_TYPE, true) == false);     // 1
+    assert(err_writer(&bufInfo, -1, ERR_TYPE__ANY_TYPE, true) == false);                 // 2
+    assert(bufInfo.is_empty == true);
+    assert(err_get_info(&errInfo, ERR_ID__ERR_WR_WRONG_ID_OR_TYPE) == true);
+    assert(errInfo.counter_unhandled == 2);
+    assert(err_get_info(&errInfo, ERR_ID__ERR_WRONG_ID) == true);
+    assert(errInfo.counter_unhandled == 2);
+    printf("  PASS: wrong id -> err_writer().\n");
+
+  // неправильный тип
+    assert(err_writer(&bufInfo, ERR_ID__UNDEFINED, ERR_TYPE__AMOUNT, true) == false);    // 1
+    assert(err_writer(&bufInfo, ERR_ID__UNDEFINED, -1, true) == false);                  // 2
+    assert(bufInfo.is_empty == true);
+    assert(err_get_info(&errInfo, ERR_ID__ERR_WR_WRONG_ID_OR_TYPE) == true);
+    assert(errInfo.counter_unhandled == 4);
+    assert(err_get_info(&errInfo, ERR_ID__ERR_WRONG_TYPE) == true);
+    assert(errInfo.counter_unhandled == 2);
+    printf("  PASS: wrong type -> err_writer().\n");
+
+  // сброс ошибок
+    err_reset_all();
+
+  // нет ошибок, вывод unhandled (ничего не должен записать)
+    for(ErrType errType = 0; errType < ERR_TYPE__AMOUNT; errType++)
     {
-      errInfo = err_get_info(id); 
-      unsigned int msg_size = 1 + snprintf(NULL, 0, "%d/%d/%s\n", 
-                                (int)id, 
-                                (int)errInfo.counter_cur,                       // cur всегда будет больше, чем разница, так что можем считать для "худшего" случая 
-                                errInfo.description_ptr);
-     if(max_msg_size < msg_size)
+      for(ErrId errId = 0; errId < ERR_ID__AMOUNT; errId ++)
       {
-        max_msg_size = msg_size;
+        assert(err_writer(&bufInfo, errId, errType, true) == true);
+        assert(bufInfo.is_empty == true);
       }
     }
-    // если прилетает assert -> размер массива/буффера "BUFFER_FOR_ERRORS_SIZE" слишком маленький.
-    assert(BUFFER_FOR_ERRORS_SIZE > max_msg_size);
-    printf("  PASS: BUFFER_FOR_ERRORS_SIZE(%d) - достаточный размер(%d).\n",
-                    BUFFER_FOR_ERRORS_SIZE, max_msg_size);
 
-  // Провека info return
-    for(ErrType type = 0; type < ERR_TYPE__AMOUNT; type++)
+    printf("  PASS: write 1.\n");
+
+  // запись всех ошибок
+    for(ErrId errId = 0; errId < ERR_ID__AMOUNT; errId ++)
     {
-      errWriterInfo = err_writer__set_task__all_errors(type);
-      are_those_structs_same(errWriterInfo, err_writer__get_info());
-      assert(strcmp(errWriterInfo.arr_ptr, "") == 0); 
-      assert(errWriterInfo.state       == ERR_WRITER__CUR_TASK__WRITE_ALL_ERRORS);
-      assert(errWriterInfo.type_filter == type);
-      
-      errWriterInfo = err_writer__set_task__err_unhandled_errors(type);
-      are_those_structs_same(errWriterInfo, err_writer__get_info());
-      assert(strcmp(errWriterInfo.arr_ptr, "") == 0); 
-      assert(errWriterInfo.state       == ERR_WRITER__CUR_TASK__WRITE_UNHANDLED_ERRORS);
-      assert(errWriterInfo.type_filter == type);
-
-      printf("  PASS: return, type %d\n", type);      
+      unsigned int offset_last = bufInfo.offset;
+      assert(err_writer(&bufInfo, errId, ERR_TYPE__ANY_TYPE, false) == true);
+      assert(bufInfo.is_empty == false);
+      assert(offset_last + 5 < bufInfo.offset);                                 // даже если описание пустое - как минимум три слэша и два кода
     }
+    printf("  PASS: write 2.\n");
+    printf("ERRORS LIST:\n");
+    printf("%s", ERR_HEADER_MESSAGE);
+    printf("%s", bufInfo.arr_ptr);
+  
+  // отчищаем буфер
+    assert(buf_clear(&bufInfo) == true);
+  // проверка фильтра
+    for(ErrId errId = 0; errId < ERR_ID__AMOUNT; errId ++)
+    {   
+      // берем одну ошибку и поднимаем флаг
+        assert(err_raise_error(errId) == true);
+        assert(err_get_info(&errInfo, errId) == true);
 
-  // Проверка записи ALL ERR
-    for(ErrType type = 0; type < ERR_TYPE__AMOUNT; type++)
-    {
-      errWriterInfo = err_writer__set_task__all_errors(type);
-      errWriterInfo = err_writer__write_next_part();
-      if(is_there_any_error_with_cur_type(type) == true)
-      {
-        assert(strcmp(errWriterInfo.arr_ptr, ERR_HEADER_MESSAGE) == 0);        
-        for(int id = 0; id < ERR_ID__AMOUNT; id++)
+      // проверяем что другие фильтры не реагируют
+        for(ErrType errType = 0; errType < ERR_TYPE__AMOUNT; errType++)
         {
-          errWriterInfo = err_writer__write_next_part();
-          if(get_error_type(id) == type)
+          if(errType != errInfo.type && errType != ERR_TYPE__ANY_TYPE)
           {
-            snprintf(test_arr, sizeof(test_arr), "%d/%d/%s\n", id, get_error_counter(id), get_err_description_ptr_arr(id));
-            assert(strcmp(errWriterInfo.arr_ptr, test_arr) == 0);
+            for(ErrId errId2 = 0; errId2 < ERR_ID__AMOUNT; errId2 ++)
+            {
+              assert(err_writer(&bufInfo, errId2, errType, true) == true);
+              assert(bufInfo.is_empty == true);
+            }
           }
-          else
+        }
+
+
+      // проверяем, что нужный фильтр найдет только одну ошибку, как и должен
+        int errors_written_counter = 0;
+        for(ErrId errId = 0; errId < ERR_ID__AMOUNT; errId ++)
+        {
+          unsigned int offset_last = bufInfo.offset;
+          assert(err_writer(&bufInfo, errId, errInfo.type, true) == true);
+          if(offset_last + 5 < bufInfo.offset)                                  // даже если описание пустое - как минимум три слэша и два кода
           {
-            assert(strcmp(errWriterInfo.arr_ptr, "") == 0);
+            errors_written_counter++;
           }
-        }   
-      }
+        }
+        // проверяем, что такая ошибка была только одна
+          assert(errors_written_counter == 1);
 
-      else
-      {
-        assert(strcmp(errWriterInfo.arr_ptr, "") == 0);
-        assert(get_error_counter(ERR_ID__ERR_WR_UNLISTED_ERROR_TYPE) > 0);
-        assert(errWriterInfo.state == ERR_WRITER__CUR_TASK__COMPLETE);
-      }
+        // проверяем, что её обработали
+          assert(err_get_info(&errInfo, errId) == true);
+          assert(errInfo.unhandled == false);
+        // отчищаем буфер
+          assert(buf_clear(&bufInfo) == true);
+      }   
+      printf("  PASS: type filter 1.\n");
 
-      printf("  PASS: write all err: type %d\n", type);
+      // сброс ошибок
+        err_reset_all();
     }
-
-  printf("c_errors_writer_test.c: ВСЕ ТЕСТЫ УСПЕШНО ПРОЙДЕНЫ!\n\n");
-
-  // Сброс ошибок
-    for(int id = 0; id < ERR_ID__AMOUNT; id++)
-    {
-      reset_error_counter(id);
-      reset_unhandled_error_flag(id);
-    }
-}

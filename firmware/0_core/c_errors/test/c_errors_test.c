@@ -4,30 +4,28 @@ void c_errors_test()
 {
   #define VALID_ID ERR_ID__UNDEFINED
   #define INVALID_ID ERR_USHORT_MAX
-
-  printf("c_errors_test.c: init.\n");
+  
   struct ErrInfo errInfo;
 
   // Тест инициализации ошибок
     for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
     {
-      errInfo = err_get_info(id);
+      assert(err_get_info(&errInfo, id) == true);
       assert(errInfo.id == id);
-      assert(errInfo.was_id_correct == true);
       assert(errInfo.description_ptr != NULL);
       assert(errInfo.counter_unhandled == 0);
       assert(errInfo.counter_total == 0);
       assert(errInfo.unhandled == false);
       assert(errInfo.type != ERR_TYPE__ANY_TYPE);
-      assert(errInfo.type != ERR_TYPE__AMOUNT);      
+      assert(errInfo.type < ERR_TYPE__AMOUNT); 
     }
     printf("  PASS: errors id.\n");
 
-  // Тест наличия ERR_ID__ERR_WRONG_TYPE, ERR_ID__ERR_WRONG_ID
-    errInfo = err_get_info(ERR_ID__ERR_WRONG_ID);
-    assert(errInfo.was_id_correct == true);
-    errInfo = err_get_info(ERR_ID__ERR_WRONG_TYPE);
-    assert(errInfo.was_id_correct == true);
+  // Тест наличия базовых ошибок
+    assert(err_get_info(&errInfo, ERR_ID__UNDEFINED) == true);
+    assert(err_get_info(&errInfo, ERR_ID__ERR_WRONG_ID) == true);
+    assert(err_get_info(&errInfo, ERR_ID__ERR_WRONG_TYPE) == true);
+    assert(err_get_info(&errInfo, ERR_ID__ERR_RECEIVED_NULL) == true);
     printf("  PASS: errors id.\n");
 
   // Тест, что ошибки вообще записаны в c_errors_list.def
@@ -42,10 +40,9 @@ void c_errors_test()
     for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
     {
       assert(err_raise_error(id) == true);
-      errInfo = err_get_info(id);
+      assert(err_get_info(&errInfo, id) == true);
       
       assert(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == true);
-      assert(errInfo.was_id_correct == true);
       assert(errInfo.id == id);
       assert(errInfo.type != ERR_TYPE__AMOUNT);
       assert(errInfo.type != ERR_TYPE__ANY_TYPE);
@@ -60,9 +57,7 @@ void c_errors_test()
     for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
     {
       assert(err_reset_counter_and_flag(id) == true);
-      errInfo = err_get_info(id);
-
-      assert(errInfo.was_id_correct == true);
+      assert(err_get_info(&errInfo, id) == true);
       assert(errInfo.id == id);
       assert(errInfo.type != ERR_TYPE__AMOUNT);
       assert(errInfo.type != ERR_TYPE__ANY_TYPE);
@@ -75,45 +70,49 @@ void c_errors_test()
     printf("  PASS: err_has_unhandled_errors().\n");
 
   // Тест неправильного ID
-    // отправляем неправильный айди и смотрим инфо
-      assert(err_reset_counter_and_flag(ERR_ID__AMOUNT) == false);   // первый неправильный ID
-      assert(err_reset_counter_and_flag(-1) == false);               // второй неправильный ID
-      errInfo = err_get_info(ERR_ID__AMOUNT);                        // третий неправильный ID
+    // тест функции проверки id
+      assert(err_is_id_correct(-1) == false);                                   // 1
+      assert(err_is_id_correct(ERR_ID__AMOUNT) == false);                       // 2
 
-      assert(errInfo.was_id_correct == false);
+    // отправляем неправильный айди и смотрим инфо
+      assert(err_reset_counter_and_flag(-1) == false);                          // 3
+      assert(err_reset_counter_and_flag(ERR_ID__AMOUNT) == false);              // 4
+      assert(err_get_info(&errInfo, ERR_ID__AMOUNT) == false);                  // 5
       assert(errInfo.type != ERR_TYPE__AMOUNT);
       assert(errInfo.type != ERR_TYPE__ANY_TYPE);
       assert(errInfo.description_ptr != NULL);
       printf("  PASS: wrong id.\n");
 
     // смотрим зарегестрировалась ли ошибка
-      errInfo = err_get_info(ERR_ID__ERR_WRONG_ID);
-
+      assert(err_get_info(&errInfo, ERR_ID__ERR_WRONG_ID) == true);
       assert(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == true);
-      assert(errInfo.was_id_correct == true);
       assert(errInfo.id == ERR_ID__ERR_WRONG_ID);
       assert(errInfo.type != ERR_TYPE__AMOUNT);
       assert(errInfo.type != ERR_TYPE__ANY_TYPE);
       assert(errInfo.description_ptr != NULL);
       assert(errInfo.unhandled == true);
-      assert(errInfo.counter_unhandled == 3);
+      assert(errInfo.counter_unhandled == 5);                                   // +5
       printf("  PASS: register wrong id.\n");
 
   // Тест неправильного типа ошибки
     //сбрасиваем счётчик
       assert(err_reset_counter_and_flag(ERR_ID__ERR_WRONG_TYPE) == true);
 
+    // тест функции проверки
+      assert(err_is_type_correct(-1) == false);                                 // 1
+      assert(err_is_type_correct(ERR_TYPE__AMOUNT) == false);                   // 2
+
     // Отправляем неправильный тип ошибки
-      assert(err_has_unhandled_errors(ERR_TYPE__AMOUNT) == false);   // 1
+      assert(err_has_unhandled_errors(-1) == false);                            // 3
+      assert(err_has_unhandled_errors(ERR_TYPE__AMOUNT) == false);              // 4
       printf("  PASS: wrong types.\n");
     
     // Проверяем
-      errInfo = err_get_info(ERR_ID__ERR_WRONG_TYPE);
-      assert(errInfo.was_id_correct == true);
+      assert(err_get_info(&errInfo, ERR_ID__ERR_WRONG_TYPE) == true);
       assert(errInfo.id == ERR_ID__ERR_WRONG_TYPE);
       assert(errInfo.description_ptr != NULL);
       assert(errInfo.unhandled == true);
-      assert(errInfo.counter_unhandled == 1);     // +1
+      assert(errInfo.counter_unhandled == 4);                                   // +2
       printf("  PASS: register wrong types.\n");
 
   // Тест фильтрации
@@ -127,7 +126,7 @@ void c_errors_test()
       for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
       {
         // узнаём тип ошибки с id
-          errInfo = err_get_info(id);
+          assert(err_get_info(&errInfo, id) == true);
         ErrType type =  errInfo.type;
         // поднимаем ошибку
           assert(err_raise_error(id) == true);
@@ -149,18 +148,18 @@ void c_errors_test()
     // Тест переполнения
       for(ErrId id = 0; id < ERR_USHORT_MAX + 1000; id++)
       {
-        err_raise_error(ERR_ID__ERR_WR_UNLISTED_ERROR_TYPE);
+        err_raise_error(ERR_ID__UNDEFINED);
       }
-      errInfo = err_get_info(ERR_ID__ERR_WR_UNLISTED_ERROR_TYPE);
+      assert(err_get_info(&errInfo, ERR_ID__UNDEFINED) == true);
       assert(errInfo.counter_unhandled == ERR_USHORT_MAX);
       assert(errInfo.counter_total     == ERR_USHORT_MAX);
       printf("  PASS: counter overfill.\n");
 
-    // Полный сброс, тест функций для тестирования (должен быть определен макрос TURN_ON_TEST_FEATURES в tasks.json)
+    // Полный сброс, тест функции для тестирования (должен быть определен макрос TURN_ON_TEST_FEATURES в tasks.json)
       err_reset_all();
       for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
       {
-        errInfo = err_get_info(id);
+        assert(err_get_info(&errInfo, id) == true);
         assert(errInfo.counter_unhandled == 0);
         assert(errInfo.counter_total == 0);
         assert(errInfo.unhandled == false);
@@ -169,5 +168,4 @@ void c_errors_test()
 
   #undef VALID_ID
   #undef INVALID_ID
-  printf("c_errors_test: done.\n\n");
 }

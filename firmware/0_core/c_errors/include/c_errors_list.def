@@ -1,11 +1,13 @@
 // 'c_errors.c'
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__UNDEFINED,               "undefined/test error") 
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_ID,            "err << wrong id")
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_TYPE,          "err << wrong type")
+ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__UNDEFINED,                  "undefined error id") 
+ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_ID,               "err < < wrong id")
+ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_TYPE,             "err < < wrong type")
+ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_RECEIVED_NULL,          "err < < NULL")
 
 // 'c_buffer.c'
-ERRORS_LIST(ERR_TYPE__FATAL,   ERR_ID__BUF_RECEIVED_NULL,       "buf << NULL")
-ERRORS_LIST(ERR_TYPE__FATAL,   ERR_ID__BUF_BAD_FLOAT_PRECISION, "buf << bad float precision")
+ERRORS_LIST(ERR_TYPE__FATAL,   ERR_ID__BUF_RECEIVED_NULL,          "buf < < NULL")
+ERRORS_LIST(ERR_TYPE__FATAL,   ERR_ID__BUF_BAD_FLOAT_PRECISION,    "buf < < bad float precision")
 
 // 'c_errors_writer.c'
-ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__ERR_WR_UNLISTED_ERROR_TYPE, "err_wr << unlisted error type")
+ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__ERR_WR_RECEIVED_NULL,       "err_wr < < NULL")
+ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__ERR_WR_WRONG_ID_OR_TYPE,    "err_wr < < wrong id or type")

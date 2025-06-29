@@ -2,7 +2,6 @@
 
 void c_buffer_test()
 {
-  printf("c_buffer_test.c: init.\n");
     struct ErrInfo errInfo;
 
   // создаём буфер (должен быть static и выделятся вне функций, здесь только для теста)
@@ -60,7 +59,7 @@ void c_buffer_test()
     unsigned short wrong_precision = BUF_FLOAT_MAX_PRECISION + 1;
     assert(buf_write_float(&bufInfo, test_float, wrong_precision) == false);
     assert(strcmp(bufInfo.arr_ptr, "12") == 0);                  // должно остаться предыдущее значение
-    errInfo = err_get_info(ERR_ID__BUF_BAD_FLOAT_PRECISION);                             
+    assert(err_get_info(&errInfo, ERR_ID__BUF_BAD_FLOAT_PRECISION) == true);                             
     assert(errInfo.unhandled == true);                                          // проверяем, что ошибка NULL зарегестрированна
     printf("  PASS: buf_write_float() - bad precision.\n");
 
@@ -88,50 +87,48 @@ void c_buffer_test()
     // Сброс ошибок для тестов с NULL
       for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
       {
-        err_reset_counter_and_flag(id);
+        assert(err_reset_counter_and_flag(id) == true);
       }
       assert(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == false);
     
     // buf_init()
-      err_reset_counter_and_flag(ERR_ID__BUF_RECEIVED_NULL);                    // Сброс ошибки
+      assert(err_reset_counter_and_flag(ERR_ID__BUF_RECEIVED_NULL) == true);    // Сброс ошибки
       assert(buf_init(NULL, NULL, 2) == false);                                 // отправляем NULL
       assert(buf_init(&bufInfo, NULL, 2) == false);                             // отправляем NULL
       assert(buf_init(NULL, char_buffer_arr, 2) == false);                      // отправляем NULL
-      errInfo = err_get_info(ERR_ID__BUF_RECEIVED_NULL);                             
+      assert(err_get_info(&errInfo, ERR_ID__BUF_RECEIVED_NULL) == true);                             
       assert(errInfo.counter_unhandled == 3);                                   // проверяем, что ошибка NULL зарегестрированна
       printf("  PASS: NULL -> buf_init().\n");
 
 
     // buf_write_char()
-      err_reset_counter_and_flag(ERR_ID__BUF_RECEIVED_NULL);                    // Сброс ошибки
+      assert(err_reset_counter_and_flag(ERR_ID__BUF_RECEIVED_NULL) == true);    // Сброс ошибки
       assert(buf_write_char(NULL, "test") == false);                            // отправляем NULL
       assert(buf_write_char(&bufInfo, NULL) == false);                          // отправляем NULL
-      errInfo = err_get_info(ERR_ID__BUF_RECEIVED_NULL);                             
+      assert(err_get_info(&errInfo, ERR_ID__BUF_RECEIVED_NULL) == true);                             
       assert(errInfo.counter_unhandled == 2);                                   // проверяем, что ошибка NULL зарегестрированна
       printf("  PASS: NULL -> buf_write_char().\n");
     
     // buf_write_int()
-      err_reset_counter_and_flag(ERR_ID__BUF_RECEIVED_NULL);                    // Сброс ошибки
+      assert(err_reset_counter_and_flag(ERR_ID__BUF_RECEIVED_NULL) == true);    // Сброс ошибки
       assert(buf_write_int(NULL, 123) == false);                                // отправляем NULL
-      errInfo = err_get_info(ERR_ID__BUF_RECEIVED_NULL);                             
+      assert(err_get_info(&errInfo, ERR_ID__BUF_RECEIVED_NULL) == true);                             
       assert(errInfo.counter_unhandled == 1);                                   // проверяем, что ошибка NULL зарегестрированна
       printf("  PASS: NULL -> buf_write_int().\n");
     
     // buf_write_float()
-      err_reset_counter_and_flag(ERR_ID__BUF_RECEIVED_NULL);                    // Сброс ошибки
+      assert(err_reset_counter_and_flag(ERR_ID__BUF_RECEIVED_NULL) == true);    // Сброс ошибки
       assert(buf_write_float(NULL, 4.56, 2) == false);                          // отправляем NULL
-      errInfo = err_get_info(ERR_ID__BUF_RECEIVED_NULL);                             
+      assert(err_get_info(&errInfo, ERR_ID__BUF_RECEIVED_NULL) == true);                             
       assert(errInfo.counter_unhandled == 1);                                    // проверяем, что ошибка NULL зарегестрированна
       printf("  PASS: NULL -> buf_write_float().\n");
 
     // buf_clear()
-      err_reset_counter_and_flag(ERR_ID__BUF_RECEIVED_NULL);                    // Сброс ошибки
+      assert(err_reset_counter_and_flag(ERR_ID__BUF_RECEIVED_NULL) == true);    // Сброс ошибки
       assert(buf_clear(NULL) == false);                                         // отправляем NULL
-      errInfo = err_get_info(ERR_ID__BUF_RECEIVED_NULL);                             
+      assert(err_get_info(&errInfo, ERR_ID__BUF_RECEIVED_NULL) == true);                             
       assert(errInfo.counter_unhandled == 1);                                   // проверяем, что ошибка NULL зарегестрированна
       printf("  PASS: NULL -> buf_clear().\n");
-      
-  printf("c_buffer_test: done.\n\n");
 
   // Сброс ошибок
     err_reset_all();

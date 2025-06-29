@@ -42,10 +42,10 @@
             //  "${workspaceFolder}/firmware/1_libs/c_buffer/example/c_buffer_example.c",
 
         // 2_services
-          // c_errors_writer
-          //  "-I${workspaceFolder}/firmware/2_services/c_errors_writer/include",
-          //    "${workspaceFolder}/firmware/2_services/c_errors_writer/src/c_errors_writer.c",
-          //    "${workspaceFolder}/firmware/2_services/c_errors_writer/test/c_errors_writer_test.c",
+           //c_errors_writer
+            "-I${workspaceFolder}/firmware/2_services/c_errors_writer/include",
+              "${workspaceFolder}/firmware/2_services/c_errors_writer/src/c_errors_writer.c",
+              "${workspaceFolder}/firmware/2_services/c_errors_writer/test/c_errors_writer_test.c",
              //"${workspaceFolder}/firmware/2_services/c_errors_writer/example/c_errors_writer_example.c",
 
         // 3_managers

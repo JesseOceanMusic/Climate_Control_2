@@ -1,4 +1,5 @@
 #pragma once
+  #include <stdio.h>                                                            // нужен для NULL
   #include <stdbool.h>
   #define ERR_USHORT_MAX 65535
 
@@ -22,7 +23,6 @@
 
   struct ErrInfo
   {
-    bool           was_id_correct;
     ErrId          id;                // id ошибки
     ErrType        type;              // тип ошибки
     const char*    description_ptr;   // const* = указатель на неизменяемые данные, сам указатель менять можно.
@@ -31,12 +31,13 @@
     unsigned short counter_total;     // сколько было всего ошибок за время работы программы
   };
 
-  static const char ERR_HEADER_MESSAGE[] = "ERRORS:\nID/counter/description:\n";
- 
   bool           err_has_unhandled_errors  (ErrType type);
   bool           err_raise_error           (ErrId error_id);
-  struct ErrInfo err_get_info              (ErrId error_id);                    // возвращаем именно по значению, а не по указателю. безопаснее. разница в скорости минимальна.
+  bool           err_get_info              (struct ErrInfo* errInfo, ErrId error_id);
   bool           err_reset_counter_and_flag(ErrId error_id);
+
+  bool           err_is_id_correct         (ErrId error_id);                    // пока не используется никем другим, но пусть будет
+  bool           err_is_type_correct       (ErrType type);                      // нужна для err_writer в паблике, как utils
 
   // доп функции для тестирования  
     #ifdef TURN_ON_TEST_FEATURES
