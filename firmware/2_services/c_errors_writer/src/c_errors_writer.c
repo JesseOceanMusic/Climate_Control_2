@@ -4,9 +4,16 @@ static bool is_buffer_has_enough_space(struct BufInfo *struct_ptr, ErrId errId)
 {
   struct ErrInfo errInfo;
   err_get_info(&errInfo, errId);
+
+  if(errInfo.description_ptr == NULL)                                           // защита от дурака, который мог добавить description == NULL в c_errors_list.def
+  {                                                                             
+    err_raise_error(ERR_ID__ERR_DESCRIPTION_IS_NULL);
+    return false;
+  }
+
   unsigned int needed_size = snprintf(NULL, 0, "%d/%d/%s\n", 
                                 (int)errId, 
-                                (int)errInfo.counter_total,                   // counter_total всегда будет >= counter_unhandled считать для "худшего" случая 
+                                (int)errInfo.counter_total,                     // counter_total всегда будет >= counter_unhandled считать для "худшего" случая 
                                 errInfo.description_ptr);
                                 
   if (struct_ptr->size_left < needed_size)

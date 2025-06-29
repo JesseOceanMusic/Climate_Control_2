@@ -13,6 +13,7 @@ void c_errors_test()
       assert(err_get_info(&errInfo, id) == true);
       assert(errInfo.id == id);
       assert(errInfo.description_ptr != NULL);
+      assert(errInfo.description_ptr != "");
       assert(errInfo.counter_unhandled == 0);
       assert(errInfo.counter_total == 0);
       assert(errInfo.unhandled == false);
