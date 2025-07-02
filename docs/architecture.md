@@ -20,7 +20,10 @@
        │    ├─── hal/                         # Абстракция железа
        │    ├─── ESP-IDF/                     # Фреймоворк ESP32  
        │    └─── c_errors/                    # Система ошибок
-       │  
+       |         └─── include/
+       │              ├─── c_errors_public.h/       # Для ВСЕХ модулей
+       │              └─── c_errors_internal.h/     # ТОЛЬКО для c_errors_writer!
+       |
        ├─── 1_libs/                        # Уровень 1 (библиотеки)
        │    ├─── c_buffer/                    # Статический буфер
        │    ├─── telegram?

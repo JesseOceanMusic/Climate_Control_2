@@ -17,6 +17,8 @@
     "new": "c",
     "string.h": "c",
     "type_traits": "c",
-    "run_all_tests.h": "c"
+    "run_all_tests.h": "c",
+    "c_errors_internal.h": "c",
+    "c_errors_public.h": "c"
   }
 }

@@ -1,6 +1,6 @@
 #include "c_errors_writer.h"
 
-static bool is_buffer_has_enough_space(struct BufInfo *struct_ptr, ErrId errId)
+static bool is_buffer_has_enough_space(struct BufHandle *struct_ptr, ErrId errId)
 {
   struct ErrInfo errInfo;
   err_get_info(&errInfo, errId);
@@ -23,7 +23,7 @@ static bool is_buffer_has_enough_space(struct BufInfo *struct_ptr, ErrId errId)
   return true;
 }
 
-static void write_error_to_buffer(struct BufInfo *struct_ptr, ErrId errId, bool only_unhandled)
+static void write_error_to_buffer(struct BufHandle *struct_ptr, ErrId errId, bool only_unhandled)
 {
   struct ErrInfo errInfo;
   err_get_info(&errInfo, errId);
@@ -45,7 +45,7 @@ static void write_error_to_buffer(struct BufInfo *struct_ptr, ErrId errId, bool 
   buf_write_char(struct_ptr, "\n");
 }
 
-bool err_writer(struct BufInfo *struct_ptr, ErrId errId, ErrType errType_filter, bool only_unhandled)
+bool err_writer(struct BufHandle *struct_ptr, ErrId errId, ErrType errType_filter, bool only_unhandled)
 {
   if(struct_ptr == NULL)
   {

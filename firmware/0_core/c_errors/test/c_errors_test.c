@@ -13,7 +13,6 @@ void c_errors_test()
       assert(err_get_info(&errInfo, id) == true);
       assert(errInfo.id == id);
       assert(errInfo.description_ptr != NULL);
-      assert(errInfo.description_ptr != "");
       assert(errInfo.counter_unhandled == 0);
       assert(errInfo.counter_total == 0);
       assert(errInfo.unhandled == false);
@@ -156,7 +155,7 @@ void c_errors_test()
       assert(errInfo.counter_total     == ERR_USHORT_MAX);
       printf("  PASS: counter overfill.\n");
 
-    // Полный сброс, тест функции для тестирования (должен быть определен макрос TURN_ON_TEST_FEATURES в tasks.json)
+    // Полный сброс, тест функции для тестирования (должен быть определен макрос ENABLE_UNIT_TESTING_API в tasks.json)
       err_reset_all();
       for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
       {

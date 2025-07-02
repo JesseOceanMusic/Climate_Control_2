@@ -24,7 +24,7 @@
         
 
         // !!!                           
-        "-DTURN_ON_TEST_FEATURES", // аналог макроса '#define TURN_ON_TEST_FEATURES'
+        "-DENABLE_UNIT_TESTING_API", // аналог макроса '#define ENABLE_UNIT_TESTING_API'
         // !!!
 
         // 0_core

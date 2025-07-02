@@ -1,4 +1,4 @@
-#include "c_errors.h"
+#include "c_errors_internal.h"
 
   static const char *err_description_ptr_arr [ERR_ID__AMOUNT] =                 // указатели на текстовое описание ошибок из .def файла
   {
@@ -48,12 +48,12 @@
     {
       err_unhandled_arr[error_id] = true;
 
-      if(err_counter_total_arr[error_id] < ERR_USHORT_MAX)
+      if(err_counter_total_arr[error_id] < ERR_COUNTER_MAX)
       {
         err_counter_total_arr[error_id]++;
       }
 
-      if(err_counter_unhandled_arr[error_id] < ERR_USHORT_MAX)
+      if(err_counter_unhandled_arr[error_id] < ERR_COUNTER_MAX)
       {
         err_counter_unhandled_arr[error_id]++;
       }
@@ -125,8 +125,17 @@
     _Static_assert(ERR_TYPE__ANY_TYPE        == 0,               "ERR_TYPE__ANY_TYPE must be 0!");
     _Static_assert(ERR_TYPE__ANY_TYPE        < ERR_TYPE__AMOUNT, "ERR_TYPE__ANY_TYPE must be defined in c_errors_list.def!");
 
-  // доп функции для тестирования
-    #ifdef TURN_ON_TEST_FEATURES
+  // доп функции для юнит-тестов, интеграционных тестов
+    #ifdef ENABLE_UNIT_TESTING_API
+      unsigned short err_get_total_counter(ErrId error_id)
+      {
+        if(err_is_id_correct(error_id) == true)
+        {
+          return err_counter_total_arr[error_id];
+        }
+        return 0;
+      }
+
       void err_reset_all()
       {
         for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
