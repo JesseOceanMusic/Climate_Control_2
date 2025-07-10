@@ -24,7 +24,7 @@
         
 
         // !!!                           
-        "-DENABLE_UNIT_TESTING_API", // аналог макроса '#define ENABLE_UNIT_TESTING_API'
+        "-DENABLE_UNIT_TESTING_API", // тоже самое, что макрос '#define ENABLE_UNIT_TESTING_API'
         // !!!
 
         // 0_core
@@ -39,14 +39,14 @@
             "-I${workspaceFolder}/firmware/1_libs/c_buffer/include",
               "${workspaceFolder}/firmware/1_libs/c_buffer/src/c_buffer.c",
               "${workspaceFolder}/firmware/1_libs/c_buffer/test/c_buffer_test.c",
-            //  "${workspaceFolder}/firmware/1_libs/c_buffer/example/c_buffer_example.c",
+          //    "${workspaceFolder}/firmware/1_libs/c_buffer/example/c_buffer_example.c",
 
         // 2_services
            //c_errors_writer
             "-I${workspaceFolder}/firmware/2_services/c_errors_writer/include",
               "${workspaceFolder}/firmware/2_services/c_errors_writer/src/c_errors_writer.c",
               "${workspaceFolder}/firmware/2_services/c_errors_writer/test/c_errors_writer_test.c",
-             //"${workspaceFolder}/firmware/2_services/c_errors_writer/example/c_errors_writer_example.c",
+           //  "${workspaceFolder}/firmware/2_services/c_errors_writer/example/c_errors_writer_example.c",
 
         // 3_managers
 

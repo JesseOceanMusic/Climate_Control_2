@@ -1,6 +1,4 @@
 #pragma once
-  #include <stddef.h>                                                           // Для NULL
-  #include <stdbool.h>
   #include "c_errors_public.h"
 
   #define ERR_USHORT_MAX 65535

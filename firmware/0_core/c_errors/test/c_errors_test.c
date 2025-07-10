@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <assert.h>
+
+#include "c_errors_internal.h"
 #include "c_errors_test.h"
 
 void c_errors_test()

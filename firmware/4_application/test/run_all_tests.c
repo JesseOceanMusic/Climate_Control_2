@@ -1,3 +1,5 @@
+  #include "stdio.h"
+
   // 0_core
     #include "c_errors_test.h"
   // 1_libs

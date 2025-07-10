@@ -1,3 +1,4 @@
+#include <stdio.h>                                                              // нужен для NULL
 #include "c_buffer.h"
 
 //#define BUFFER_FULL_CLEAR_WITH_MEMSET
@@ -5,97 +6,143 @@
   #include <string.h>
 #endif
 
-static void buf_update_size_left(struct BufHandle *struct_ptr)
+const char* BUF_BAD_ID = "BUF_BAD_ID";
+
+// создаём и инициализируем буферы из списка
+  #define BUFFER_LIST(buffer_id, buffer_name, buffer_size) static char buffer_name[buffer_size] = {0}; // X-MACROS
+  #include "c_buffer_list.def"
+  #undef  BUFFER_LIST
+
+// Структура для хранения информации о буфере
+struct BufInfoPrivate
 {
-  struct_ptr->size_left = struct_ptr->arr_size_ - struct_ptr->offset_ - 1;
-  // size_left: сколько осталось байт для записи ('\0' уже вычтен)
-  // arr_size_: размер массива в байтах целиком
-  // offset_: указывает на индекс, в котором находится '\0'
-  // в пустом массиве из 2 байт:
-            // offset_    = 0
-            // size_left = 1
-            // arr_size_  = 2
-}
+    char*              ptr;
+    const unsigned int size;
+    unsigned int       offset;
+};
 
-bool buf_init(struct BufHandle *struct_ptr, char* arr_ptr, unsigned int arr_size_)
+// Создаём массив структур с информацией о буферах
+static struct BufInfoPrivate bufInfoPrivate[BUF_ID__AMOUNT] = {
+    #define BUFFER_LIST(buffer_id, buffer_name, buffer_size) [buffer_id] = {buffer_name, buffer_size, 0},
+    #include "c_buffer_list.def"
+    #undef BUFFER_LIST
+};
+
+static bool buf_is_id_correct(BufId bufId)
 {
-  if(struct_ptr == NULL || arr_ptr == NULL)
+  if(bufId >= 0 && bufId < BUF_ID__AMOUNT)
   {
-    err_raise_error(ERR_ID__BUF_RECEIVED_NULL);
-    return false;
-  }
-
-  struct_ptr->arr_ptr = arr_ptr;
-  struct_ptr->arr_size_ = arr_size_;
-  struct_ptr->offset_ = 0;
-  buf_update_size_left(struct_ptr);
-  struct_ptr->is_empty = true;
-  return true;
-}
-
-bool buf_write_char(struct BufHandle *struct_ptr, const char *data_char)          // основная функция ЗАПИСИ в буфер CHAR
-{
-  if(struct_ptr == NULL || data_char == NULL)
-  {
-    err_raise_error(ERR_ID__BUF_RECEIVED_NULL);
-    return false;
-  }
-
-  unsigned int needed_size = 1 + snprintf(NULL, 0, data_char);
-
-  if(struct_ptr->offset_ + needed_size <= struct_ptr->arr_size_)                  // 1. Проверяем, есть ли место для записи
-  {
-    struct_ptr->offset_ += snprintf(struct_ptr->arr_ptr + struct_ptr->offset_,    // 2. Выполняем запись. snprintf вернет количество символов, 
-                                   struct_ptr->arr_size_ - struct_ptr->offset_,   // которое БЫЛО БЫ записано, если бы буфера было достаточно.
-                                   "%s", data_char);                            // Оно также запишет столько, сколько влезет, и поставит нуль-терминатор.
-    
-    buf_update_size_left(struct_ptr);
-    struct_ptr->is_empty = false;
     return true;
   }
+
+  err_raise_error(ERR_ID__BUF_RECEIVED_WRONG_ID);
   return false;
 }
 
-bool buf_write_int(struct BufHandle *struct_ptr, int data_int)                    // функция записи INT в буфер
-{
-  //здесь на NULL проверять не надо -> проверим в buf_write_char()
-  char data_char[BUF_INT_MAX_SYMBOLS_LENGTH];
-  snprintf(data_char, sizeof(data_char), "%d", data_int);
-  return buf_write_char(struct_ptr, data_char);
-}
-
-bool buf_write_float(struct BufHandle *struct_ptr, float data_float, unsigned short precision) // функция записи FLOAT в буфер
-{
-  //здесь на NULL проверять не надо -> проверим в buf_write_char()
-  if(precision > BUF_FLOAT_MAX_PRECISION)
+// операции
+  bool buf_write_char(BufId bufId, const char* data_char_ptr)               // основная функция ЗАПИСИ в буфер CHAR
   {
-    err_raise_error(ERR_ID__BUF_BAD_FLOAT_PRECISION);
+    if(data_char_ptr == NULL)
+    {
+      err_raise_error(ERR_ID__BUF_RECEIVED_NULL);
+      return false;
+    }
+
+    if(buf_is_id_correct(bufId) == false)
+    {
+      return false;
+    }
+
+    unsigned int needed_size = 1 + snprintf(NULL, 0, data_char_ptr);
+
+    if(bufInfoPrivate[bufId].offset + needed_size <= bufInfoPrivate[bufId].size)                            // 1. Проверяем, есть ли место для записи
+    {
+      bufInfoPrivate[bufId].offset += snprintf(bufInfoPrivate[bufId].ptr + bufInfoPrivate[bufId].offset,    // 2. Выполняем запись. snprintf вернет количество символов, 
+                                    bufInfoPrivate[bufId].size - bufInfoPrivate[bufId].offset,              // которое БЫЛО БЫ записано, если бы буфера было достаточно.
+                                    "%s", data_char_ptr);                                                   // Оно также запишет столько, сколько влезет, и поставит нуль-терминатор.
+      return true;
+    }
     return false;
   }
 
-  char data_char[BUF_FLOAT_MAX_SYMBOLS_LENGTH];
-  snprintf(data_char, sizeof(data_char), "%.*f", precision, data_float);
-                                          // `.*` означает, что точность будет взята из следующего аргумента функции (precision)
-  return buf_write_char(struct_ptr, data_char);
-}
-
-bool buf_clear(struct BufHandle *struct_ptr)                                      // функция ОТЧИСТКИ буфера
-{
-  if(struct_ptr == NULL)
+  bool buf_write_int(BufId bufId, const int   data_int)                         // функция записи INT в буфер
   {
-    err_raise_error(ERR_ID__BUF_RECEIVED_NULL);
-    return false;
+    //здесь на NULL проверять не надо -> проверим в buf_write_char()
+    char data_char_ptr[BUF_INT_MAX_SYMBOLS_LENGTH];
+    snprintf(data_char_ptr, sizeof(data_char_ptr), "%d", data_int);
+    return buf_write_char(bufId, data_char_ptr);
   }
 
-  struct_ptr->offset_ = 0;  
-  struct_ptr->is_empty = true;
-  buf_update_size_left(struct_ptr);
+  bool buf_write_float(BufId bufId, const float data_float, const unsigned short precision) // функция записи FLOAT в буфер
+  {
+    //здесь на NULL проверять не надо -> проверим в buf_write_char()
+    if(precision > BUF_FLOAT_MAX_PRECISION)
+    {
+      err_raise_error(ERR_ID__BUF_WRONG_FLOAT_PRECISION);
+      return false;
+    }
 
-  #ifdef BUFFER_FULL_CLEAR_WITH_MEMSET
-    memset(struct_ptr->arr_ptr , 0, struct_ptr->arr_size_);                      // БЕЗОПАСНЕЕ // заполняет весь массив нулями
-  #endif
+    char data_char_ptr[BUF_FLOAT_MAX_SYMBOLS_LENGTH];
+    snprintf(data_char_ptr, sizeof(data_char_ptr), "%.*f", precision, data_float);
+                                                 // `.*` означает, что точность будет взята из следующего аргумента функции (precision)
+    return buf_write_char(bufId, data_char_ptr);
+  }
 
-  struct_ptr->arr_ptr[0] = '\0';                                                // БЫСТРЕЕ // только первый элемент массива = нуль-терминатор
+  bool buf_clear(BufId bufId)                                                   // функция очистки буфера
+  {
+    if(buf_is_id_correct(bufId) == false)
+    {
+      return false;
+    }
 
-  return true;
-}
+    bufInfoPrivate[bufId].offset = 0;
+
+    #ifdef BUFFER_FULL_CLEAR_WITH_MEMSET
+      memset(bufInfoPrivate[bufId].ptr , 0, bufInfoPrivate[bufId].size);        // БЕЗОПАСНЕЕ // заполняет весь массив нулями
+    #endif
+
+    bufInfoPrivate[bufId].ptr[0] = '\0';                                        // БЫСТРЕЕ // только первый элемент массива = нуль-терминатор
+
+    return true;
+  }
+
+// геттеры
+  const char* buf_get_arr_ptr  (BufId bufId)
+  {
+    if(buf_is_id_correct(bufId) == false)
+    {
+      return BUF_BAD_ID;
+    }
+    return bufInfoPrivate[bufId].ptr;
+  }
+
+  unsigned int buf_get_size_left(BufId bufId)
+  {
+    if(buf_is_id_correct(bufId) == false)
+    {
+      return 0;
+    }
+
+    return (bufInfoPrivate[bufId].size - bufInfoPrivate[bufId].offset - 1);
+    // size_left: сколько осталось байт для записи ('\0' уже вычтен)
+    // arr_size_: размер массива в байтах целиком
+    // offset_: указывает на индекс, в котором находится '\0'
+    // в пустом массиве из 2 байт:
+              // offset_    = 0
+              // size_left = 1
+              // arr_size_  = 2
+  }
+
+  bool buf_get_is_empty (BufId bufId)
+  {
+    if(buf_is_id_correct(bufId) == false)
+    {
+      return false;
+    }
+
+    if(bufInfoPrivate[bufId].offset == 0)
+    {
+      return true;
+    }
+    return false;
+  }

@@ -1,4 +1,5 @@
 #include "c_errors_internal.h"
+#include <stddef.h>                                                           // Для NULL
 
   static const char *err_description_ptr_arr [ERR_ID__AMOUNT] =                 // указатели на текстовое описание ошибок из .def файла
   {
