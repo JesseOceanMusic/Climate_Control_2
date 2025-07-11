@@ -13,15 +13,6 @@ void c_errors_writer_test()
     assert(buf_clear(BUF_ID__TG_MSG) == true);
     err_reset_all();
 
-  // проверка достаточного ли размера буфер чтобы записать заголовок и одну любую ошибку
-    for(ErrId errId = (ErrId)0; errId < ERR_ID__AMOUNT; errId++)
-    {
-      assert(buf_write_char(BUF_ID__TG_MSG, ERR_HEADER_MESSAGE) == true);
-      assert(err_writer__write_one_err(BUF_ID__TG_MSG, errId, ERR_TYPE__ANY_TYPE, false) == true);
-      assert(buf_clear(BUF_ID__TG_MSG) == true);
-    }
-    printf("  PASS: buf size.\n");
-
   // invalid buf id
     assert(err_writer__write_one_err(BUF_ID__AMOUNT, (ErrId)0, (ErrType)0, false) == false);
     assert(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == true);
@@ -53,6 +44,15 @@ void c_errors_writer_test()
 
     printf("  PASS: unhandled filter.\n");
 
+  // проверка достаточного ли размера буфер чтобы записать заголовок и одну любую ошибку
+    for(ErrId errId = (ErrId)0; errId < ERR_ID__AMOUNT; errId++)
+    {
+      assert(buf_write_char(BUF_ID__TG_MSG, ERR_HEADER_MESSAGE) == true);
+      assert(err_writer__write_one_err(BUF_ID__TG_MSG, errId, ERR_TYPE__ANY_TYPE, false) == true);
+      assert(buf_clear(BUF_ID__TG_MSG) == true);
+    }
+    printf("  PASS: buf size.\n");
+
   // запись всех ошибок и может ли буфер вместить их всех в себя сразу
     assert(buf_write_char(BUF_ID__TG_MSG, ERR_HEADER_MESSAGE));
     for(ErrId errId = 0; errId < ERR_ID__AMOUNT; errId ++)
@@ -62,6 +62,40 @@ void c_errors_writer_test()
 
     printf("  PASS: errors list is written to buffer, size left: %d bytes.\n", buf_get_size_left(BUF_ID__TG_MSG));
     assert(buf_clear(BUF_ID__TG_MSG) == true);
+
+  // тест переполнения
+    // считаем сколько влезет в буфер
+      unsigned int buf_size = buf_get_size_left(BUF_ID__TG_MSG);
+      assert(err_writer__write_one_err(BUF_ID__TG_MSG, ERR_ID__UNDEFINED, ERR_TYPE__ANY_TYPE, false) == true);
+      unsigned int buf_capacity = buf_size / (buf_size - buf_get_size_left(BUF_ID__TG_MSG));
+
+    // 20 раз переполняем буффер
+      for(unsigned int i = 0; i < buf_capacity + 20; i++)                                  
+      {
+        assert(err_raise_error(ERR_ID__UNDEFINED) == true);
+        if(err_writer__write_one_err(BUF_ID__TG_MSG, ERR_ID__UNDEFINED, ERR_TYPE__ANY_TYPE, true) == true)
+        {
+          assert(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == false);
+        }
+
+        else // переполнился, больше не может записать в буфер и ошибки не сбрасываются
+        {
+          assert(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == true);
+        }
+      }
+
+    // есть необработанные ошибки
+      assert(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == true);
+    // отчищаем буфер и записываем её
+      assert(buf_clear(BUF_ID__TG_MSG) == true);
+      assert(err_writer__write_one_err(BUF_ID__TG_MSG, ERR_ID__UNDEFINED, ERR_TYPE__ANY_TYPE, true) == true);
+    // больше нет необработанных ошибок
+      assert(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == false);
+
+    // сброс ошибок и буфера для следующих тестов
+      assert(buf_clear(BUF_ID__TG_MSG) == true);
+      err_reset_all();
+    printf("  PASS: overfill");
 
   // проверка фильтров
     for(ErrId errId = 0; errId < ERR_ID__AMOUNT; errId ++)
