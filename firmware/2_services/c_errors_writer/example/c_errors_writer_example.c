@@ -12,7 +12,7 @@ int main()
       printf("%s", ERR_HEADER_MESSAGE);
       for(ErrId errId = 0; errId < ERR_ID__AMOUNT; errId++)
       {
-        err_writer__write_one_err(BUF_ID__TG_MSG, errId, ERR_TYPE__ANY_TYPE, true);
+        errwr__write_one_err(BUF_ID__TG_MSG, errId, ERR_TYPE__ANY_TYPE, true);
       }
     printf("%s", buf_get_arr_ptr(BUF_ID__TG_MSG));
 
@@ -23,7 +23,7 @@ int main()
     printf("%s", ERR_HEADER_MESSAGE);
     for(ErrId errId = 0; errId < ERR_ID__AMOUNT; errId++)
     {
-      err_writer__write_one_err(BUF_ID__TG_MSG, errId, ERR_TYPE__ANY_TYPE, false);
+      errwr__write_one_err(BUF_ID__TG_MSG, errId, ERR_TYPE__ANY_TYPE, false);
     }
     printf("%s", buf_get_arr_ptr(BUF_ID__TG_MSG));
 

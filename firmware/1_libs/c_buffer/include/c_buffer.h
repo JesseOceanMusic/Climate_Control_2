@@ -18,6 +18,10 @@
       BUF_ID__AMOUNT,                                                           // ДОЛЖЕН БЫТЬ ПОСЛЕДНИМ! // Количество Ошибок
     }BufId;
 
+  // хелперы
+    bool buf_is_id_correct     (BufId bufId);
+    bool buf_will_this_data_fit(BufId bufId, const char* data_char_ptr);
+  
   // операции
     bool buf_write_char (BufId bufId, const char* data_char_ptr);
     bool buf_write_int  (BufId bufId, const int   data_int);

@@ -1,4 +1,2 @@
-BUFFER_LIST(BUF_ID__TG_MSG, buf_name__tg_msg, 1024)
-
-BUFFER_LIST(BUF_ID__TEST1, buf_name__test1, 2)
-BUFFER_LIST(BUF_ID__TEST2, buf_name__test2, 16)
+BUFFER_LIST(BUF_ID__TG_MSG,   buf_name__tg_msg,   1024)
+BUFFER_LIST(BUF_ID__ERR_TEMP, buf_name__err_temp, 128)

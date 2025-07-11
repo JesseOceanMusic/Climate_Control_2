@@ -28,41 +28,43 @@ static struct BufInfoPrivate bufInfoPrivate[BUF_ID__AMOUNT] = {
     #undef BUFFER_LIST
 };
 
-static bool buf_is_id_correct(BufId bufId)
-{
-  if(bufId >= 0 && bufId < BUF_ID__AMOUNT)
+// хелперы
+  bool buf_is_id_correct(BufId bufId)
   {
-    return true;
+    if(bufId >= 0 && bufId < BUF_ID__AMOUNT) { return true; }
+    err_raise_error(ERR_ID__BUF_RECEIVED_WRONG_ID);
+    return false;
   }
 
-  err_raise_error(ERR_ID__BUF_RECEIVED_WRONG_ID);
-  return false;
-}
-
-// операции
-  bool buf_write_char(BufId bufId, const char* data_char_ptr)               // основная функция ЗАПИСИ в буфер CHAR
+  bool buf_will_this_data_fit(BufId bufId, const char* data_char_ptr)
   {
     if(data_char_ptr == NULL)
-    {
+    {                                                                             
       err_raise_error(ERR_ID__BUF_RECEIVED_NULL);
       return false;
     }
 
-    if(buf_is_id_correct(bufId) == false)
+    unsigned int needed_size = snprintf(NULL, 0, data_char_ptr);
+                                  
+    if(buf_get_size_left(bufId) < needed_size) { return false; }                // МЕСТО КОНЧИЛОСЬ
+
+    return true;
+  }
+
+// операции
+  bool buf_write_char(BufId bufId, const char* data_char_ptr)                   // основная функция ЗАПИСИ в буфер CHAR
+  {
+    if(buf_is_id_correct(bufId)                     == false) { return false; }
+    if(buf_will_this_data_fit(bufId, data_char_ptr) == false)                   // хватит ли места для записи? там же проверим на NULL
     {
+      err_raise_error(ERR_ID__BUF_OVERFILLED);
       return false;
     }
 
-    unsigned int needed_size = 1 + snprintf(NULL, 0, data_char_ptr);
-
-    if(bufInfoPrivate[bufId].offset + needed_size <= bufInfoPrivate[bufId].size)                            // 1. Проверяем, есть ли место для записи
-    {
-      bufInfoPrivate[bufId].offset += snprintf(bufInfoPrivate[bufId].ptr + bufInfoPrivate[bufId].offset,    // 2. Выполняем запись. snprintf вернет количество символов, 
-                                    bufInfoPrivate[bufId].size - bufInfoPrivate[bufId].offset,              // которое БЫЛО БЫ записано, если бы буфера было достаточно.
-                                    "%s", data_char_ptr);                                                   // Оно также запишет столько, сколько влезет, и поставит нуль-терминатор.
-      return true;
-    }
-    return false;
+    bufInfoPrivate[bufId].offset += snprintf(bufInfoPrivate[bufId].ptr + bufInfoPrivate[bufId].offset, // 2. Выполняем запись. snprintf вернет количество символов, 
+                                    bufInfoPrivate[bufId].size - bufInfoPrivate[bufId].offset,         // которое БЫЛО БЫ записано, если бы буфера было достаточно.
+                                    "%s", data_char_ptr);                                              // Оно также запишет столько, сколько влезет, и поставит нуль-терминатор.
+    return true;
   }
 
   bool buf_write_int(BufId bufId, const int   data_int)                         // функция записи INT в буфер
@@ -90,10 +92,7 @@ static bool buf_is_id_correct(BufId bufId)
 
   bool buf_clear(BufId bufId)                                                   // функция очистки буфера
   {
-    if(buf_is_id_correct(bufId) == false)
-    {
-      return false;
-    }
+    if(buf_is_id_correct(bufId) == false) { return false; }
 
     bufInfoPrivate[bufId].offset = 0;
 
@@ -102,26 +101,20 @@ static bool buf_is_id_correct(BufId bufId)
     #endif
 
     bufInfoPrivate[bufId].ptr[0] = '\0';                                        // БЫСТРЕЕ // только первый элемент массива = нуль-терминатор
-
     return true;
   }
+
 
 // геттеры
   const char* buf_get_arr_ptr  (BufId bufId)
   {
-    if(buf_is_id_correct(bufId) == false)
-    {
-      return BUF_BAD_ID;
-    }
+    if(buf_is_id_correct(bufId) == false) { return BUF_BAD_ID; }
     return bufInfoPrivate[bufId].ptr;
   }
 
   unsigned int buf_get_size_left(BufId bufId)
   {
-    if(buf_is_id_correct(bufId) == false)
-    {
-      return 0;
-    }
+    if(buf_is_id_correct(bufId) == false) { return 0; }
 
     return (bufInfoPrivate[bufId].size - bufInfoPrivate[bufId].offset - 1);
     // size_left: сколько осталось байт для записи ('\0' уже вычтен)
@@ -135,14 +128,7 @@ static bool buf_is_id_correct(BufId bufId)
 
   bool buf_get_is_empty (BufId bufId)
   {
-    if(buf_is_id_correct(bufId) == false)
-    {
-      return false;
-    }
-
-    if(bufInfoPrivate[bufId].offset == 0)
-    {
-      return true;
-    }
+    if(buf_is_id_correct(bufId) == false) { return false; }
+    if(bufInfoPrivate[bufId].offset == 0) { return true;  }
     return false;
   }

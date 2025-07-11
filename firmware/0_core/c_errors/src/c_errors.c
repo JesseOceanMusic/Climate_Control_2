@@ -22,11 +22,8 @@
 
   bool err_is_id_correct(ErrId error_id)
   {
-    if(error_id >= 0 && error_id < ERR_ID__AMOUNT)
-    {
-      return true;
-    }
-    if (error_id != ERR_ID__ERR_WRONG_ID)  // Защита от рекурсии
+    if(error_id >= 0 && error_id < ERR_ID__AMOUNT) { return true; }
+    if(error_id != ERR_ID__ERR_WRONG_ID)                                        // Защита от рекурсии
     {
       err_raise_error(ERR_ID__ERR_WRONG_ID);
     }
@@ -35,10 +32,7 @@
 
   bool err_is_type_correct(ErrType type)
   {
-    if(type >= 0 && type < ERR_TYPE__AMOUNT)
-    {
-      return true;
-    }
+    if(type >= 0 && type < ERR_TYPE__AMOUNT) { return true; }
     err_raise_error(ERR_ID__ERR_WRONG_TYPE);
     return false;
   }

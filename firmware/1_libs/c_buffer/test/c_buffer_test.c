@@ -97,18 +97,27 @@ void c_buffer_test()
       assert(err_get_total_counter(ERR_ID__BUF_RECEIVED_NULL) == 1);
       err_reset_all();
       printf("  PASS: NULL > > buf_write_char().\n");
-      
+
+    // NULL > > buf_will_this_data_fit()
+      assert(buf_will_this_data_fit(BUF_ID__TG_MSG, NULL) == false);
+      assert(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == true);
+      assert(err_get_total_counter(ERR_ID__BUF_RECEIVED_NULL) == 1);
+      err_reset_all();
+      printf("  PASS: NULL > > buf_will_this_data_fit().\n");
+
     // Wrong ID
-      assert(buf_write_char(BUF_ID__AMOUNT, "hey") == false);                   // 1
-      assert(buf_write_int(BUF_ID__AMOUNT, 123) == false);                      // 2
-      assert(buf_write_float(BUF_ID__AMOUNT, 2, 0) == false);                   // 3
-      assert(buf_clear(BUF_ID__AMOUNT) == false);                               // 4
-      assert(buf_get_arr_ptr(BUF_ID__AMOUNT) == BUF_BAD_ID);                    // 5 придёт указатель на BUF_BAD_ID
-      assert(buf_get_size_left(BUF_ID__AMOUNT) == 0);                           // 6
-      assert(buf_get_is_empty(BUF_ID__AMOUNT) == false);                        // 7
+      assert(buf_write_char        (BUF_ID__AMOUNT, "hey") == false);           // 1
+      assert(buf_write_int         (BUF_ID__AMOUNT, 123) == false);             // 2
+      assert(buf_write_float       (BUF_ID__AMOUNT, 2, 0) == false);            // 3
+      assert(buf_clear             (BUF_ID__AMOUNT) == false);                  // 4
+      assert(buf_get_arr_ptr       (BUF_ID__AMOUNT) == BUF_BAD_ID);             // 5 придёт указатель на BUF_BAD_ID
+      assert(buf_get_size_left     (BUF_ID__AMOUNT) == 0);                      // 6
+      assert(buf_get_is_empty      (BUF_ID__AMOUNT) == false);                  // 7
+      assert(buf_is_id_correct     (BUF_ID__AMOUNT) == false);                  // 8
+      assert(buf_will_this_data_fit(BUF_ID__AMOUNT, "hey") == false);           // 9
 
       assert(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == true);
-      assert(err_get_total_counter(ERR_ID__BUF_RECEIVED_WRONG_ID) == 7);
+      assert(err_get_total_counter(ERR_ID__BUF_RECEIVED_WRONG_ID) == 9);
       printf("  PASS: wrong id.\n");
   // Сброс ошибок
     err_reset_all();

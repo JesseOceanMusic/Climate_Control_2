@@ -5,11 +5,12 @@ ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__UNDEFINED,                  "undefined er
 ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_ID,               "err < < wrong id")
 ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_TYPE,             "err < < wrong type")
 ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_RECEIVED_NULL,          "err < < NULL")
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_DESCRIPTION_IS_NULL,    "error description == NULL")
+ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_DESCRIPTION_IS_NULL,    "err < < description is NULL")
 
 // 'c_buffer.c'
 ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__BUF_RECEIVED_NULL,          "buf < < NULL")
 ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__BUF_RECEIVED_WRONG_ID,      "buf < < wrong id")
+ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__BUF_OVERFILLED,             "buf < < overfilled")
 ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__BUF_WRONG_FLOAT_PRECISION,  "buf < < wrong float precision")
 
 // 'c_errors_writer.c'
