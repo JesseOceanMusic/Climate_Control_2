@@ -1,23 +1,23 @@
 {
     "configurations": [
         {
-            "name": "Win32",
-            "includePath": [
+            "name": "Linux (Docker)",
+            "includePath":
+            [
                 "${workspaceFolder}/firmware/0_core/c_errors/include",
                 "${workspaceFolder}/firmware/1_libs/c_buffer/include",
                 "${workspaceFolder}/firmware/2_services/c_errors_writer/include", // vs code в глаза долбится и не видит этот файл без подсказки
                 "${workspaceFolder}/firmware/4_application/include"
-                //"${workspaceFolder}/firmware/**"
             ],
-            "defines": [
+            "defines":
+            [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
-            "intelliSenseMode": "windows-gcc-x64"
+            "intelliSenseMode": "linux-gcc-x64"
         }
     ],
     "version": 4

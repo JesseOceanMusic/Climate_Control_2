@@ -1,0 +1,29 @@
+{
+  "name": "C/C++ Project (Docker)",
+  "build": {
+    "dockerfile": "Dockerfile", // Путь теперь просто "Dockerfile", так как он в той же папке
+    "context": ".."             // Контекст сборки по-прежнему корневая папка проекта
+  },
+  "workspaceFolder": "/app",
+  "customizations":
+  {
+    "vscode":
+    {
+      "extensions":
+      [
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cmake-tools",
+        "ms-vscode.vscode-node-debug2"
+      ],
+      "settings":
+      {
+        "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+        "C_Cpp.intelliSenseEngine": "default",
+        "C_Cpp.errorSquiggles": "enabled"
+      }
+    }
+  },
+  "postCreateCommand": "apt-get update && apt-get install -y git gdb",
+  "remoteUser": "root"
+}

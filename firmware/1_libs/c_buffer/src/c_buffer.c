@@ -44,7 +44,7 @@ static struct BufInfoPrivate bufInfoPrivate[BUF_ID__AMOUNT] = {
       return false;
     }
 
-    unsigned int needed_size = snprintf(NULL, 0, data_char_ptr);
+    unsigned int needed_size = snprintf(NULL, 0, "%s", data_char_ptr);
                                   
     if(buf_get_size_left(bufId) < needed_size) { return false; }                // МЕСТО КОНЧИЛОСЬ
 

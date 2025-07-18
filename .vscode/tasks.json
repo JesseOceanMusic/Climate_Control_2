@@ -3,10 +3,11 @@
   "tasks":
   [
     {
-      "label": "C/C++: Build Project (GCC)",
+      "label": "Build Project",
       "type": "shell",
-      "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
-      "args": [
+      "command": "gcc",
+      "args":
+      [
         "-fdiagnostics-color=always",            
         "-g",                      // включить отладочную информацию в выходной исполняемый файл.
         

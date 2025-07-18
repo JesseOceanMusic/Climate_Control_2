@@ -137,11 +137,11 @@ void c_errors_test()
         // проверяем фильтр
           assert(err_has_unhandled_errors(type) == true);
         // проверяем, что другие фильтры не реагируют
-          for(ErrType type_2; type_2 < ERR_TYPE__AMOUNT; type_2++)
+          for(ErrType type_2 = 0; type_2 < ERR_TYPE__AMOUNT; type_2++)
           {
             if(type != type_2 && type_2 != ERR_TYPE__ANY_TYPE)
             {
-              assert(err_has_unhandled_errors(type) == false);
+              assert(err_has_unhandled_errors(type_2) == false);
             }
           }
         // cбрасываем
