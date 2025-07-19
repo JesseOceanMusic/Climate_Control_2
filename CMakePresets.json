@@ -1,0 +1,26 @@
+{
+  "version": 3,
+  "configurePresets":
+  [
+    {
+      "name": "Build App",
+      "displayName": "Build App",
+      "binaryDir": "${sourceDir}/build/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Build",
+        "BUILD_TESTING": "OFF",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/out/install/${presetName}"
+      }
+    },
+    {
+      "name": "Build Tests",
+      "displayName": "Build Tests",
+      "binaryDir": "${sourceDir}/build/out/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Test",
+        "BUILD_TESTING": "ON",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}//build/out/build/install/${presetName}"
+      }
+    }
+  ]
+}

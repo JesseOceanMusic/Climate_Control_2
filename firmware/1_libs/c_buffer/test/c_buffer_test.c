@@ -4,9 +4,8 @@
 
 #include "c_buffer.h"
 #include "c_errors_public.h"
-#include "c_buffer_test.h"
 
-void c_buffer_test()
+int main()
 {
   // Тест инициализации буферов
     assert(BUF_ID__AMOUNT > 0);

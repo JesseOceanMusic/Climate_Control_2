@@ -1,0 +1,28 @@
+// .vscode/settings.json
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.errorSquiggles": "enabled",
+
+    // CMake Tools Extension settings
+    "cmake.cmakePath": "/usr/bin/cmake",
+    "cmake.buildDirectory": "${workspaceFolder}/build/out/${presetName}",
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "cmake.generator": "Unix Makefiles", // Или "Ninja", если используете
+
+    // Принудительное указание компиляторов через configureSettings
+    // ЭТО ОЧЕНЬ ВАЖНО, если Kits не работают
+    "cmake.configureSettings": {
+        "CMAKE_C_COMPILER": "/usr/bin/gcc",  // ПРОВЕРЬТЕ ЭТИ ПУТИ В КОНТЕЙНЕРЕ (which gcc)
+        "CMAKE_CXX_COMPILER": "/usr/bin/g++", // ПРОВЕРЬТЕ ЭТИ ПУТИ В КОНТЕЙНЕРЕ (which g++)
+        "CMAKE_BUILD_TYPE": "Debug"
+    },
+
+    "cmake.ctestArgs": [
+      "--output-on-failure",
+      "-V"
+    ],
+    "files.associations":{
+      "*.def": "c"
+    }
+}

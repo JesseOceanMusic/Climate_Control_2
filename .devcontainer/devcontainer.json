@@ -4,7 +4,7 @@
     "dockerfile": "Dockerfile", // Путь теперь просто "Dockerfile", так как он в той же папке
     "context": ".."             // Контекст сборки по-прежнему корневая папка проекта
   },
-  "workspaceFolder": "/workspaces/Climate_Control_2",
+  "workspaceFolder": "/workspaces/climate_control_2",
   "customizations":
   {
     "vscode":

@@ -1,72 +1,18 @@
 {
   "version": "2.0.0",
-  "tasks":
-  [
+  "tasks": [
     {
-      "label": "Build Project",
+      "label": "Build with CMake",
       "type": "shell",
-      "command": "gcc",
-      "args":
-      [
-        "-fdiagnostics-color=always",            
-        "-g",                      // включить отладочную информацию в выходной исполняемый файл.
-        
-        "-Wall",                   // включает все распространенные предупреждения (warnings),
-                                   // которые компилятор GCC может обнаружить.
-                                   // Эти предупреждения часто указывают на потенциальные ошибки, сомнительные
-                                   // конструкции или неоптимальный код. По сути, это уже форма статического анализа.
-
-        "-Wextra",                 // включает дополнительные предупреждения, которые не охватываются W-all. 
-                                   // Он еще больше расширяет объем статического анализа, выполняемого компилятором.
-
-        "-Werror",                 // превращает все предупреждения в ошибки. Это очень строгий, но эффективный подход,
-                                   // который заставляет вас исправлять каждую потенциальную проблему, обнаруженную компилятором,
-                                   // прежде чем код сможет скомпилироваться.
-        
-
-        // !!!                           
-        "-DENABLE_UNIT_TESTING_API", // тоже самое, что макрос '#define ENABLE_UNIT_TESTING_API'
-        // !!!
-
-        // 0_core
-          // c_errors
-            "-I${workspaceFolder}/firmware/0_core/c_errors/include",
-              "${workspaceFolder}/firmware/0_core/c_errors/src/c_errors.c",
-              "${workspaceFolder}/firmware/0_core/c_errors/test/c_errors_test.c",
-              //"${workspaceFolder}/firmware/0_core/c_errors/example/c_errors_example.c",
-
-        // 1_libs
-          // c_buffer
-            "-I${workspaceFolder}/firmware/1_libs/c_buffer/include",
-              "${workspaceFolder}/firmware/1_libs/c_buffer/src/c_buffer.c",
-              "${workspaceFolder}/firmware/1_libs/c_buffer/test/c_buffer_test.c",
-          //    "${workspaceFolder}/firmware/1_libs/c_buffer/example/c_buffer_example.c",
-
-        // 2_services
-           //c_errors_writer
-            "-I${workspaceFolder}/firmware/2_services/c_errors_writer/include",
-              "${workspaceFolder}/firmware/2_services/c_errors_writer/src/c_errors_writer.c",
-              "${workspaceFolder}/firmware/2_services/c_errors_writer/test/c_errors_writer_test.c",
-           //  "${workspaceFolder}/firmware/2_services/c_errors_writer/example/c_errors_writer_example.c",
-
-        // 3_managers
-
-        // 4_application
-          "-I${workspaceFolder}/firmware/4_application/include",
-            "${workspaceFolder}/firmware/4_application/test/run_all_tests.c",
-
-        "-o",                      // Этот флаг используется для указания имени выходного файла, который будет создан компилятором.
-                                   // После "-o" указывается имя файла.
-
-        "${workspaceFolder}/bin/${fileBasenameNoExtension}.exe"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}/bin"
-      },
-      "problemMatcher": [
+      "command": "cd build && ctest --output-on-failure -V",
+      "problemMatcher":[
         "$gcc"
       ],
-      "group": "build"
+      "group": {
+        "kind": "test",
+        "isDefault": true,
+        "detail": "compiler: /usr/bin/gcc"
+      }
     }
   ]
 }

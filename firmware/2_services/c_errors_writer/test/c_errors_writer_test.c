@@ -6,7 +6,7 @@
 #include "c_errors_writer.h"
 #include "c_errors_writer_test.h"
 
-void c_errors_writer_test()
+int main()
 {
   // создаём структуру и сбрасываем ошибки
     struct ErrInfo errInfo;
