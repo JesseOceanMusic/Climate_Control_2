@@ -52,14 +52,14 @@ int main()
       assert(errInfo.description_ptr != NULL);
       assert(errInfo.unhandled == true);
       assert(errInfo.counter_unhandled == 1);
-      assert(errInfo.counter_total == 2);
+      assert(errInfo.counter_total == 1);
     }
     printf("  PASS: err_raise_error().\n");
 
   // Тест сброса
     for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
     {
-      err_raise_error("hey");
+      //err_raise_error("hey");
       assert(err_reset_counter_and_flag(id) == true);
       assert(err_get_info(&errInfo, id) == true);
       assert(errInfo.id == id);

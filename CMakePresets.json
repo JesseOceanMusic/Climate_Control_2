@@ -3,23 +3,23 @@
   "configurePresets":
   [
     {
-      "name": "Build App",
-      "displayName": "Build App",
+      "name": "Release",
+      "displayName": "Release",
       "binaryDir": "${sourceDir}/build/out/build/${presetName}",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Build",
+        "CMAKE_BUILD_TYPE": "Release",
         "BUILD_TESTING": "OFF",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/out/install/${presetName}"
       }
     },
     {
-      "name": "Build Tests",
-      "displayName": "Build Tests",
+      "name": "Debug",
+      "displayName": "Debug",
       "binaryDir": "${sourceDir}/build/out/${presetName}",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Test",
+        "CMAKE_BUILD_TYPE": "Debug",
         "BUILD_TESTING": "ON",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}//build/out/build/install/${presetName}"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/out/build/install/${presetName}"
       }
     }
   ]

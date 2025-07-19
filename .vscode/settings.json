@@ -9,6 +9,7 @@
     "cmake.buildDirectory": "${workspaceFolder}/build/out/${presetName}",
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.generator": "Unix Makefiles", // Или "Ninja", если используете
+    "cmake.enabledOutputParsers": [ "gcc" ],
 
     // Принудительное указание компиляторов через configureSettings
     // ЭТО ОЧЕНЬ ВАЖНО, если Kits не работают
