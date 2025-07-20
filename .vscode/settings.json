@@ -6,9 +6,9 @@
 
     // CMake Tools Extension settings
     "cmake.cmakePath": "/usr/bin/cmake",
-    "cmake.buildDirectory": "${workspaceFolder}/build/out/${presetName}",
+    "cmake.buildDirectory": "${workspaceFolder}/bin/build/out/${presetName}",
     "cmake.sourceDirectory": "${workspaceFolder}",
-    "cmake.generator": "Unix Makefiles", // Или "Ninja", если используете
+    "cmake.generator": "Unix Makefiles", // Или "Ninja"
     "cmake.enabledOutputParsers": [ "gcc" ],
 
     // Принудительное указание компиляторов через configureSettings

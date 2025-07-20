@@ -15,12 +15,11 @@
       "miDebuggerPath": "/usr/bin/gdb",
       "setupCommands": [
         {
-          "description": "Enable pretty-printing",
           "text": "-enable-pretty-printing",
           "ignoreFailures": true
         }
       ],
-      "preLaunchTask": "Build with CMake"
+      //"preLaunchTask": "Build with CMake"
     }
   ]
 }

@@ -4,7 +4,7 @@
     {
       "label": "Build with CMake",
       "type": "shell",
-      "command": "cd build && ctest --output-on-failure -V",
+      "command": "cd /bin/build && ctest --output-on-failure -V",
       "problemMatcher":[
         "$gcc"
       ],
