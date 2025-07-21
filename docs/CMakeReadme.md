@@ -23,3 +23,9 @@
 
   **Debug корректно запускается ТОЛЬКО из CMakeTools!**
   **Run Test (Testing UI) и Test (CMake Tools) работают оба корректно!**
+
+
+
+
+
+  lcov --capture --directory . --output-file coverage.info

@@ -27,7 +27,7 @@
 
   // === Coverage ===
     "cmake.preRunCoverageTarget": "CustomGenerateCoverageInfo",
-    "cmake.coverageInfoFiles": ["${workspaceFolder}/coverage.info"],
+    "cmake.coverageInfoFiles": ["${workspaceFolder}/bin/build/out/Debug/coverage.info"],
     "testing.showCoverageInExplorer": true,
     "testing.coverageToolbarEnabled": true,
     "testing.displayedCoveragePercent": "totalCoverage",
