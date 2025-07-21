@@ -39,3 +39,13 @@
 
 *на всякий случай - метод генерации coverage.info из терминала, если опять что-то сломается:*
 *lcov --capture --directory . --output-file coverage.info*
+
+# 
+
+// LCOV_EXCL_LINE: Игнорирует всю строку.
+
+// LCOV_EXCL_BR_LINE: Игнорирует только ветвление на этой строке (если есть другие операторы).
+
+// LCOV_EXCL_START       И    // LCOV_EXCL_STOP: Игнорирует целый блок кода.
+
+// LCOV_EXCL_BR_START    И    // LCOV_EXCL_BR_STOP: Игнорирует ветвления в блоке кода.
