@@ -1,28 +1,33 @@
-// .vscode/settings.json
 {
+  // === VS code UI settings ===
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "C_Cpp.intelliSenseEngine": "default",
     "C_Cpp.errorSquiggles": "enabled",
 
-    // CMake Tools Extension settings
+  // === CMake Tools Extension settings ===
     "cmake.cmakePath": "/usr/bin/cmake",
-    "cmake.buildDirectory": "${workspaceFolder}/bin/build/out/${presetName}",
+    "cmake.buildDirectory": "${workspaceFolder}/bin/build",
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.generator": "Unix Makefiles", // Или "Ninja"
     "cmake.enabledOutputParsers": [ "gcc" ],
-
-    // Принудительное указание компиляторов через configureSettings
-    // ЭТО ОЧЕНЬ ВАЖНО, если Kits не работают
     "cmake.configureSettings": {
-        "CMAKE_C_COMPILER": "/usr/bin/gcc",  // ПРОВЕРЬТЕ ЭТИ ПУТИ В КОНТЕЙНЕРЕ (which gcc)
-        "CMAKE_CXX_COMPILER": "/usr/bin/g++", // ПРОВЕРЬТЕ ЭТИ ПУТИ В КОНТЕЙНЕРЕ (which g++)
-        "CMAKE_BUILD_TYPE": "Debug"
+      "CMAKE_C_COMPILER": "/usr/bin/gcc",  // (which gcc)
+      "CMAKE_CXX_COMPILER": "/usr/bin/g++", // (which g++)
     },
 
-    "cmake.ctestArgs": [
-      "--output-on-failure",
-      "-V"
-    ],
+  // === Coverage ===
+    //"cmake.preRunCoverageTarget": null,
+    "cmake.coverageInfoFiles": ["${workspaceFolder}/coverage.info"],
+    "testing.showCoverageInExplorer": true,
+    "testing.coverageToolbarEnabled": true,
+    "testing.displayedCoveragePercent": "totalCoverage",
+    "testing.coverageBarThresholds": {
+      "red": 0,
+      "yellow": 70,
+      "green": 90
+    },
+
+  // === File Associations ===
     "files.associations":{
       "*.def": "c"
     }
