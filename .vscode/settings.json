@@ -1,5 +1,15 @@
 {
   // === VS code UI settings ===
+    "window.autoDetectColorScheme": false,
+    "workbench.colorTheme": "Default Light+",
+    "workbench.preferredDarkColorTheme": "Default Light+",
+    "workbench.preferredHighContrastColorTheme": "Default Light+",
+    "editor.inlineSuggest.edits.showCollapsed": true,
+    "editor.rulers": [80, 137],
+    "editor.tabSize": 2,
+    "editor.foldingStrategy": "indentation",
+
+  // === C/C++ & IntelliSense ===
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "C_Cpp.intelliSenseEngine": "default",
     "C_Cpp.errorSquiggles": "enabled",
@@ -16,7 +26,7 @@
     },
 
   // === Coverage ===
-    //"cmake.preRunCoverageTarget": null,
+    "cmake.preRunCoverageTarget": "CustomGenerateCoverageInfo",
     "cmake.coverageInfoFiles": ["${workspaceFolder}/coverage.info"],
     "testing.showCoverageInExplorer": true,
     "testing.coverageToolbarEnabled": true,

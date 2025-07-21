@@ -12,18 +12,10 @@
       "extensions":
       [
         "ms-vscode.cpptools",
-        "ms-vscode.cpptools-extension-pack",
-        "ms-vscode.cmake-tools",
-        "ms-vscode.vscode-node-debug2"
-      ],
-      "settings":
-      {
-        "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-        "C_Cpp.intelliSenseEngine": "default",
-        "C_Cpp.errorSquiggles": "enabled"
-      }
+        "ms-vscode.cpptools-themes",
+        "ms-vscode.cmake-tools"
+      ]
     }
   },
-  "postCreateCommand": "apt-get update && apt-get install -y git gdb",
   "remoteUser": "root"
 }

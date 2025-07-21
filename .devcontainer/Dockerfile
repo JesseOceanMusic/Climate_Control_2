@@ -13,6 +13,8 @@ ENV LANG=C.UTF-8
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
+    lcov \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Устанавливаем рабочую директорию внутри контейнера.
