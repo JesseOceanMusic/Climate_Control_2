@@ -41,7 +41,7 @@ if(BUILD_TESTING)
     # Используем target_compile_options, чтобы применить их только к соответствующим целям.
     # --coverage это сокращение для -fprofile-arcs -ftest-coverage
     target_compile_options(${MODULE_NAME} PRIVATE --coverage)
-    target_compile_options(${MODULE_NAME}_test PRIVATE --coverage)
+    #target_compile_options(${MODULE_NAME}_test PRIVATE --coverage)
 
     # Связываем тестовый исполняемый файл с самой библиотекой MODULE_NAME
     # И с другими зависимостями, если тест их использует

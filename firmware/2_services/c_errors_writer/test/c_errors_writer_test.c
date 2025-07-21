@@ -103,7 +103,7 @@ int main()
       // берем одну ошибку и поднимаем флаг
         assert(err_raise_error(errId) == true);
         assert(err_get_info(&errInfo, errId) == true);
-
+ 
       // проверяем что другие фильтры не реагируют
         for(ErrType errType = (ErrType)0; errType < ERR_TYPE__AMOUNT; errType++)
         {

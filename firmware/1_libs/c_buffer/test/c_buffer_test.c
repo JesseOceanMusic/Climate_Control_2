@@ -6,7 +6,7 @@
 #include "c_errors_public.h"
 
 int main()
-{/*
+{
   // Тест инициализации буферов
     assert(BUF_ID__AMOUNT > 0);
     assert(BUF_ID__AMOUNT > BUF_ID__TG_MSG);
@@ -120,4 +120,4 @@ int main()
       printf("  PASS: wrong id.\n");
   // Сброс ошибок
     err_reset_all();
-*/}
+}
