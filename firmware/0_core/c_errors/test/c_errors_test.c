@@ -82,10 +82,11 @@ int main()
       assert(err_reset_counter_and_flag(-1) == false);                          // 3
       assert(err_reset_counter_and_flag(ERR_ID__AMOUNT) == false);              // 4
       assert(err_get_info(&errInfo, ERR_ID__AMOUNT) == false);                  // 5
+      assert(err_raise_error(ERR_ID__AMOUNT) == false);                         // 6
       assert(errInfo.type != ERR_TYPE__AMOUNT);
       assert(errInfo.type != ERR_TYPE__ANY_TYPE);
       assert(errInfo.description_ptr != NULL);
-      printf("  PASS: wrong id.\n");
+    printf("  PASS: wrong id.\n");
 
     // смотрим зарегестрировалась ли ошибка
       assert(err_get_info(&errInfo, ERR_ID__ERR_WRONG_ID) == true);
@@ -95,7 +96,7 @@ int main()
       assert(errInfo.type != ERR_TYPE__ANY_TYPE);
       assert(errInfo.description_ptr != NULL);
       assert(errInfo.unhandled == true);
-      assert(errInfo.counter_unhandled == 5);                                   // +5
+      assert(errInfo.counter_unhandled == 6);                                   // 6
       printf("  PASS: register wrong id.\n");
 
   // Тест неправильного типа ошибки
@@ -159,7 +160,22 @@ int main()
       assert(errInfo.counter_total     == ERR_USHORT_MAX);
       printf("  PASS: counter overfill.\n");
 
+    // Тест NULL
+      err_reset_all();   // сброс
+      assert(err_get_info(NULL, ERR_ID__UNDEFINED) == false);
+      assert(err_get_info(&errInfo, ERR_ID__ERR_RECEIVED_NULL) == true);
+      assert(errInfo.counter_unhandled == 1);                                   // 1
+      printf("  PASS: < < NULL.\n");
+
+    // тест 
+
+
+
     // Полный сброс, тест функции для тестирования (должен быть определен макрос ENABLE_UNIT_TESTING_API в tasks.json)
+      assert(err_get_total_counter(ERR_ID__ERR_RECEIVED_NULL) == 1);            // 1
+      assert(err_get_total_counter(ERR_ID__AMOUNT) == 0);                       // неправильный айди отправили - вернуло 0
+      assert(err_get_total_counter(ERR_ID__ERR_WRONG_ID) == 1);                 // неправильный айди + 1
+
       err_reset_all();
       for(ErrId id = 0; id < ERR_ID__AMOUNT; id++)
       {

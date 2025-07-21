@@ -8,11 +8,15 @@ ENV LANG=C.UTF-8
 
 # Обновляем список пакетов и устанавливаем необходимые инструменты для сборки:
 # build-essential включает gcc, g++, make и другие утилиты.
-# cmake - для сборки проектов с использованием CMake.
+# cmake...
+# gbd - отладчик
+# lcov - отчеты по покрытию тестами
+# git контроль версий
 # rm -rf /var/lib/apt/lists/* очищает кэш пакетов после установки, уменьшая размер образа.
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
+    gdb \
     lcov \
     git \
     && rm -rf /var/lib/apt/lists/*

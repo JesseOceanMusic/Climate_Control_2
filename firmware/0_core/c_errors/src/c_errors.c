@@ -23,7 +23,7 @@
   bool err_is_id_correct(ErrId error_id)
   {
     if(error_id >= 0 && error_id < ERR_ID__AMOUNT) { return true; }
-    if(error_id != ERR_ID__ERR_WRONG_ID)                                        // Защита от рекурсии
+    if(error_id != ERR_ID__ERR_WRONG_ID)                                        // Защита от рекурсии, если кто-то неправильно инициализирует ERR_ID__ERR_WRONG_ID 
     {
       err_raise_error(ERR_ID__ERR_WRONG_ID);
     }
