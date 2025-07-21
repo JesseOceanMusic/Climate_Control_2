@@ -15,10 +15,13 @@ if(BUILD_TESTING)
   add_compile_definitions(ENABLE_UNIT_TESTING_API)
 endif()
 
-# Кастомная команда, которая вызывается (прописано в settings.json) при запуске Run Tests With Coverage из Расширения Testing UI
-  add_custom_target(CustomGenerateCoverageInfo
-    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target ExperimentalBuild
-    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target ExperimentalTest
+# Кастомная команды, которая вызываются (прописано в settings.json) при запуске Run Tests With Coverage из Расширения Testing UI
+  add_custom_target(CustomPreGenerateCoverageInfo
+    COMMAND rm -f ${CMAKE_BINARY_DIR}/coverage.info # Удаляем предыдущий отчет, если он есть (-rm remove, -f force (означает, что rm не будет запрашивать подтверждение и не выдаст ошибку, если файл не существует. Это делает команду безопасной для использования в скриптах.))
+    COMMAND lcov -z --directory ${CMAKE_BINARY_DIR} # Обнуляем счетчики (удаляет .gcda файлы и этого похоже хватает)
+  )
+
+  add_custom_target(CustomPostGenerateCoverageInfo
     COMMAND lcov --capture --directory ${CMAKE_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/coverage.info --rc lcov_branch_coverage=1
   )
 

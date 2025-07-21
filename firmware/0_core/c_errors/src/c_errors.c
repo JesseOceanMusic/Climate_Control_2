@@ -6,7 +6,7 @@
     #define ERRORS_LIST(error_type, error_id, description) [error_id] = description,        // X-MACROS
     #include "c_errors_list.def"
     #undef ERRORS_LIST
-  };
+  }; 
 
 
   static const ErrType err_type_arr[ERR_ID__AMOUNT] =

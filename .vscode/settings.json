@@ -26,7 +26,8 @@
     },
 
   // === Coverage ===
-    "cmake.preRunCoverageTarget": "CustomGenerateCoverageInfo",
+    "cmake.preRunCoverageTarget": "CustomPreGenerateCoverageInfo",
+    "cmake.postRunCoverageTarget": "CustomPostGenerateCoverageInfo",
     "cmake.coverageInfoFiles": ["${workspaceFolder}/bin/build/out/Debug/coverage.info"],
     "testing.showCoverageInExplorer": true,
     "testing.coverageToolbarEnabled": true,

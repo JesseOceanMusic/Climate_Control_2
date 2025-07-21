@@ -10,22 +10,32 @@
     - ContinuousTest	Только запуск тестов (Test)
     - ContinuousUpdate	Обновляет исходники (например, делает git pull)
 
+
 # Experimental (Экспериментальные таргеты)
   **Аналогичны Continuous, но запускаются вручную (не автоматически)**
   *Пример: ExperimentalTest — запуск тестов без ожидания изменений в репозитории*
+
+
 # Nightly (Ночные таргеты)
   **Запускаются по расписанию (например, каждую ночь). Используются для долгих тестов (stress-тесты, полное покрытие и т. д.).**
 
 
-# === Для большинства кейсов можно выставить в левой менюшке (CMake Tools) ===
-  Configure: Debug
-  Buid (target): ExperimentalBuild
+# === CMake Tools (extension), менюшка слева === #
+  **Configure** (preset): Debug
+  **Buiid**     (target): ExperimentalBuild
+  **Debug**     (target): вот здесь стоит выбирать файл и запускать дебаггер
+  **Launch**    (target): запуск программы в консоль
 
-  **Debug корректно запускается ТОЛЬКО из CMakeTools!**
-  **Run Test (Testing UI) и Test (CMake Tools) работают оба корректно!**
-
-
-
+  {...}                 : Default
 
 
-  lcov --capture --directory . --output-file coverage.info
+# === Testing (extension), менюшка слева === #
+  **Run Test**              : Работает как и при клике на отдельный тест, так и при запуске всех тестов!
+  **Debug Test**            : НЕ Работает корректно! Он запустит не тот тест, на который нажмешь,
+                              а тот файл, который выбран в таргете дебага в Cmake Tools Extension.
+  **Run Test With Coverage**: Работает! Можно запускать как отдельно покрытие, чтобы посмотреть статстику изолированно
+                              Так и все тесты сразу (но тогда одни тесты могут покрыть часть других тестов)
+
+
+*на всякий случай - метод генерации coverage.info из терминала, если опять что-то сломается:*
+*lcov --capture --directory . --output-file coverage.info*

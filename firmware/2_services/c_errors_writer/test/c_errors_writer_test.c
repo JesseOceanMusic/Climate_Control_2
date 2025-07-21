@@ -137,6 +137,6 @@ int main()
         // сброс ошибок и буфера
           assert(buf_clear(BUF_ID__TG_MSG) == true);
           err_reset_all();
-      }   
-      printf("  PASS: type filter.\n");
-    }
+    }   
+    printf("  PASS: type filter.\n");
+}
