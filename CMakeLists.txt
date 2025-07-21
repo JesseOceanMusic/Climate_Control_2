@@ -15,11 +15,12 @@ if(BUILD_TESTING)
   add_compile_definitions(ENABLE_UNIT_TESTING_API)
 endif()
 
-add_custom_target(CustomGenerateCoverageInfo
-  COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target ExperimentalBuild
-  COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target ExperimentalTest
-  COMMAND lcov --capture --directory ${CMAKE_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/coverage.info --rc lcov_branch_coverage=1
-)
+# Кастомная команда, которая вызывается (прописано в settings.json) при запуске Run Tests With Coverage из Расширения Testing UI
+  add_custom_target(CustomGenerateCoverageInfo
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target ExperimentalBuild
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target ExperimentalTest
+    COMMAND lcov --capture --directory ${CMAKE_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/coverage.info --rc lcov_branch_coverage=1
+  )
 
 # Добавляем корневую директорию для исходников firmware.
   set(FIRMWARE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/firmware")
