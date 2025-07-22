@@ -14,6 +14,7 @@ int main()
   int test_min     = time_wrapper__get_MIN();
   int test_sec     = time_wrapper__get_SEC();
 
+  assert(test_unix  >  1735765200);  // 2 января 2025
   assert(test_year  >= 2025);
 
   assert(test_month >= 0);
@@ -29,7 +30,7 @@ int main()
   assert(test_min   <= 59);
 
   assert(test_sec   >= 0);
-  assert(test_sec   <= 59);
+  assert(test_sec   <= 60);  // может быть 60 (для високосных секунд)
 
   printf("== WITHOUT 0 ==\n");
     printf("   UTC: %ju\n", time_wrapper__get_UNIX());
@@ -56,4 +57,6 @@ int main()
 
     if(test_sec < 10) { printf("%d", 0); }
     printf("%d\n", test_sec);
+
+  return 0;
 }

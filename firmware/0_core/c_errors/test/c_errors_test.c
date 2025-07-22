@@ -188,4 +188,6 @@ int main()
 
   #undef VALID_ID
   #undef INVALID_ID
+
+  return 0;
 }

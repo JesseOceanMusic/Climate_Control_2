@@ -139,4 +139,6 @@ int main()
           err_reset_all();
     }   
     printf("  PASS: type filter.\n");
+
+  return 0;
 }

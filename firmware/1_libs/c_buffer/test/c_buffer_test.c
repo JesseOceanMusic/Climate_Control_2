@@ -120,4 +120,6 @@ int main()
       printf("  PASS: wrong id.\n");
   // Сброс ошибок
     err_reset_all();
+
+  return 0;
 }
