@@ -1,5 +1,6 @@
 #include <stdio.h>                                                              // нужен для NULL
 #include "c_buffer.h"
+#include "c_errors_public.h"
 
 //#define BUFFER_FULL_CLEAR_WITH_MEMSET
 #ifdef BUFFER_FULL_CLEAR_WITH_MEMSET

@@ -15,3 +15,6 @@ ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__BUF_WRONG_FLOAT_PRECISION,  "buf < < wron
 
 // 'c_errors_writer.c'
 ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__ERR_WR_RECEIVED_NULL,       "err_wr < < NULL")
+
+// 'time_wrapper.c'
+ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__TIME_WRAPPED_NULL,       "time_wrapper localtime NULL")

@@ -40,6 +40,9 @@
 
   // === File Associations ===
     "files.associations":{
-      "*.def": "c"
+      "*.def": "c",
+      "c_buffer.h": "c",
+      "c_errors_public.h": "c",
+      "stdbool.h": "c"
     }
 }

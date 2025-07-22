@@ -1,6 +1,5 @@
 #pragma once
   #include <stdbool.h>
-  #include "c_errors_public.h"
 
   // настройки
     #define BUF_INT_MAX_SYMBOLS_LENGTH   64                                     // максимальная длина int в символах в этом микроконтроллере
