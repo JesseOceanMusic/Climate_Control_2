@@ -17,10 +17,11 @@ target_include_directories(${APP_NAME} PUBLIC
 # CMake сам разрешит транзитивные зависимости, если они правильно указаны с PUBLIC/PRIVATE.
 # Однако, явное указание часто более понятно.
 target_link_libraries(${APP_NAME} PRIVATE
-    # Модули с, которые используются в 4_application
+    # Модули, которые используются в 4_application
     c_errors_writer
     c_buffer
     c_errors
+    c_time_wrapper
 )
 
 # === Настройка интеграционных тестов ===

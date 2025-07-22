@@ -26,6 +26,7 @@
        ├─── 1_libs/                        # Уровень 1 (библиотеки)
        │    ├─── CMakeLists.txt
        │    ├─── c_buffer/                    # Статический буфер
+       │    ├─── c_time_wrapper/              # Удобная обертка для <time.h>
        │    ├─── telegram?
        │    └─── led?
        │
