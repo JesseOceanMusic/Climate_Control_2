@@ -1,5 +1,5 @@
 #include "c_errors_internal.h"
-#include <stddef.h>                                                           // Для NULL
+#include <stddef.h>                                                             // Для NULL
 
   static const char *err_description_ptr_arr [ERR_ID__AMOUNT] =                 // указатели на текстовое описание ошибок из .def файла
   {
@@ -23,10 +23,10 @@
   bool err_is_id_correct(ErrId error_id)
   {
     if(error_id >= 0 && error_id < ERR_ID__AMOUNT) { return true; }
-    if(error_id != ERR_ID__ERR_WRONG_ID)         // LCOV_EXCL_BR_START          // Защита от рекурсии, если кто-то неправильно инициализирует ERR_ID__ERR_WRONG_ID 
+    if(error_id != ERR_ID__ERR_WRONG_ID)                                        // Защита от рекурсии, если кто-то неправильно инициализирует ERR_ID__ERR_WRONG_ID 
     {
       err_raise_error(ERR_ID__ERR_WRONG_ID);
-    }                                            // LCOV_EXCL_BR_STOP
+    }
     return false;
   }
 

@@ -45,6 +45,7 @@
       "c_errors_public.h": "c",
       "stdbool.h": "c",
       "c_time_wrapper.h": "c",
-      "time.h": "c"
+      "time.h": "c",
+      "c_errors_internal.h": "c"
     }
 }
