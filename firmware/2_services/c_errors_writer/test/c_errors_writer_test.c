@@ -4,7 +4,6 @@
 
 #include "c_errors_internal.h"                                                  // internal а не public для проверки фильтра
 #include "c_errors_writer.h"
-#include "c_errors_writer_test.h"
 
 int main()
 {

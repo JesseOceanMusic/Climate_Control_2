@@ -23,8 +23,8 @@
   bool err_is_id_correct(ErrId error_id)
   {
     if(error_id >= 0 && error_id < ERR_ID__AMOUNT) { return true; }
-    if(error_id != ERR_ID__ERR_WRONG_ID)                                        // Защита от рекурсии, если кто-то неправильно инициализирует ERR_ID__ERR_WRONG_ID 
-    {
+    if(error_id != ERR_ID__ERR_WRONG_ID)                                        // Защита от рекурсии, при неправильной инициализации    // LCOV_EXCL_BR_LINE // это условие необходимо, для защиты от рекурсии! Но написание теста само по себе создаст уязвимость, так как придется отключить _Static_assert и предварительные проверки в юнит тесте и намеренно сломать c_errors_list.def! defensive programming
+    {                                                                           // ERR_ID__ERR_WRONG_ID, например -1
       err_raise_error(ERR_ID__ERR_WRONG_ID);
     }
     return false;

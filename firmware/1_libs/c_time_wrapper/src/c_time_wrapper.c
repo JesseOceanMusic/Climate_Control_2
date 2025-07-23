@@ -32,7 +32,7 @@
     memset(&tmCopy, 0, sizeof(struct tm));                                      // сбрасываем структуру на нулевые значения
     current_time_UNIX = time(NULL);                                             // "обновляем" время
 
-    if(current_time_UNIX < 1735765200 || current_time_UNIX > 6469275600)        // c 2 января 2025 по 2 января 2175
+    if(current_time_UNIX < 1735765200 || current_time_UNIX > 6469275600)        // c 2 января 2025 по 2 января 2175                      // установка системного времени является платформа-специфическим. эта ветка будет протестирована, когда будет написан модуль ntp сервера.
     {                                                                           // если этот модуль пережил 2175 год, то мне будет уже всё-равно =0
       err_raise_error(ERR_ID__TIME_WRAPPER_WRONG_YEAR);
       return;
@@ -40,11 +40,11 @@
 
     struct tm* tmOriginal_ptr = localtime(&current_time_UNIX);                  // получаем указатель на структуру
     
-    if(tmOriginal_ptr == NULL)                                                  // по идее такого быть не должно
+    if(tmOriginal_ptr == NULL)                                                  // такого быть не должно                                 // LCOV_EXCL_START // эта ветка не достижима в нормальных условиях работы, особенно с предварительной проверкой UNIX времени. defensive programming
     { 
       err_raise_error(ERR_ID__TIME_WRAPPER_NULL);
       return;
-    }
+    }                                                                                                                                    // LCOV_EXCL_STOP  // эта ветка не достижима в нормальных условиях работы, особенно с предварительной проверкой UNIX времени. defensive programming
 
     memcpy(&tmCopy, tmOriginal_ptr, sizeof(struct tm));                         // копируем структуру в кэш
   }
