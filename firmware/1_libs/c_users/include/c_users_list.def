@@ -1,4 +1,5 @@
-            //USER_ID                 //USER_RIGHTS        // tg token
-USERS_LIST(USER_ID__INVALID,            USER_RIGHTS__NONE,    USER_TOKEN__INVALID)  // ДОЛЖЕН БЫТЬ ПЕРВЫМ В СПИСКЕ!!!
-USERS_LIST(USER_ID__TG__ME,             USER_RIGHTS__ROOT,    "123")
-USERS_LIST(USER_ID__TG__SLAVA,          USER_RIGHTS__USER,    "123")
+         //USER_ID                      //USER_RIGHTS        // user tg id
+USERS_LIST(USER_NAME__INVALID,            USER_RIGHTS__NONE,    USERS__TG_ID_INVALID)  // ДОЛЖЕН БЫТЬ ПЕРВЫМ В СПИСКЕ!!!
+USERS_LIST(USER_NAME__GUEST,              USER_RIGHTS__USER,    USERS__TG_ID_INVALID)
+USERS_LIST(USER_NAME__TG__ME,             USER_RIGHTS__ROOT,    "123")
+USERS_LIST(USER_NAME__TG__SLAVA,          USER_RIGHTS__USER,    "123")
