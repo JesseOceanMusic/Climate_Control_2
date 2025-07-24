@@ -1,2 +1,3 @@
 add_subdirectory(c_buffer)
 add_subdirectory(c_time_wrapper)
+add_subdirectory(c_users)

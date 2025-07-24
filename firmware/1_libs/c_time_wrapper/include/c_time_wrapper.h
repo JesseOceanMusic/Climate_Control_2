@@ -1,6 +1,5 @@
 #pragma once
   #include <time.h>
-  #include "c_time_wrapper.h"
 
   // === геттеры по значению ===
     time_t time_wrapper__get_UNIX();                                            // количество секунд с 1 января 1970 года
