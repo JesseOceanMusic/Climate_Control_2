@@ -20,9 +20,8 @@ ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__TIME_WR__NULL,              "time_wrapp
 ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__TIME_WR__WRONG_YEAR,        "time_wrapper year < 2025")
 
 // 'users.c'
-ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__USERS__WRONG_TOKEN,         "users < < wrong token")
 ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__USERS__WRONG_NAME,          "users < < wrong name")
-ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__USERS__WRONG_ID,            "users < < wrong id")
+ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__USERS__WRONG_TG_ID,            "users < < wrong id")
 ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__USERS__WRONG_STATE,         "users < < wrong state")
 
 // 'c_errors_writer.c'

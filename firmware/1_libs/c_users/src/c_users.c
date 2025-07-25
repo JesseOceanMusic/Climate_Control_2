@@ -17,36 +17,36 @@ static const UsersRights users__rights_arr[USERS__NAMES__AMOUNT] =              
   #undef  USERS_LIST
 };
 
-static int users__cur_state[USERS__NAMES__AMOUNT] = {0};                        // массив для хранения текущего состояния пользователя (обрабатываемой команды)
+static int users__cur_state[USERS__NAMES__AMOUNT] = {USERS__STATE__DEFAULT};    // массив для хранения текущего состояния пользователя (обрабатываемой команды)
+
+static bool users__check_user_name(UsersNames user_name)
+{
+  if(user_name > USERS__NAMES__INVALID && user_name < USERS__NAMES__AMOUNT)
+  {
+    return true;
+  }
+  err__raise_error(ERR__ID__USERS__WRONG_NAME);
+  return false;
+}
 
 // узнать имя (индекс) пользователя по айди... нужна для обработки входящих запросов
   UsersNames users__get_user_name(const char* const user_tg_id)
   {
-    if(user_tg_id != NULL)
+    if(user_tg_id != NULL && strcmp(user_tg_id, USERS__TG_ID__INVALID) != 0 && strcmp(user_tg_id, USERS__TG_ID__DEFAULT) != 0)
     {
       for(UsersNames id = USERS__NAMES__INVALID + 1; id < USERS__NAMES__AMOUNT; id++)
       {
-        if (strcmp(user_tg_id, users__tg_id_arr[id]) == 0)
+        if(strcmp(user_tg_id, users__tg_id_arr[id]) == 0)
         {
           return id;
         }
       }
     }
-    err__raise_error(ERR__ID__USERS__WRONG_TOKEN);
+    err__raise_error(ERR__ID__USERS__WRONG_TG_ID);
     return USERS__NAMES__INVALID;
   }
 
 // функции работы с пользователями
-  static bool users__check_user_name(UsersNames user_name)
-  {
-    if(user_name > USERS__NAMES__INVALID && user_name < USERS__NAMES__AMOUNT)
-    {
-      return true;
-    }
-    err__raise_error(ERR__ID__USERS__WRONG_NAME);
-    return false;
-  }
-
   UsersRights users__get_user_rights(UsersNames user_name)
   {
     if(users__check_user_name(user_name) == true)
@@ -91,7 +91,7 @@ bool users__guest_set_id(const char* const user_tg_id)
     snprintf(users__tg_id_arr[USERS__NAMES__GUEST], sizeof(users__tg_id_arr[USERS__NAMES__GUEST]), "%s", user_tg_id);
     return true;
   }
-  err__raise_error(ERR__ID__USERS__WRONG_ID);
+  err__raise_error(ERR__ID__USERS__WRONG_TG_ID);
   return false;
 }
 
