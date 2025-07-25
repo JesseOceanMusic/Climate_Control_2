@@ -7,7 +7,7 @@
   #include <string.h>
 #endif
 
-const char* BUF_BAD_ID = "BUF_BAD_ID";
+const char* const BUF_BAD_ID = "BUF_BAD_ID";
 
 // создаём и инициализируем буферы из списка
   #define BUFFER_LIST(buffer_id, buffer_name, buffer_size) static char buffer_name[buffer_size] = {0}; // X-MACROS
@@ -37,7 +37,7 @@ static struct BufInfoPrivate bufInfoPrivate[BUF_ID__AMOUNT] = {
     return false;
   }
 
-  bool buf_will_this_data_fit(BufId bufId, const char* data_char_ptr)
+  bool buf_will_this_data_fit(BufId bufId, const char* const data_char_ptr)
   {
     if(data_char_ptr == NULL)
     {                                                                             
@@ -53,7 +53,7 @@ static struct BufInfoPrivate bufInfoPrivate[BUF_ID__AMOUNT] = {
   }
 
 // операции
-  bool buf_write_char(BufId bufId, const char* data_char_ptr)                   // основная функция ЗАПИСИ в буфер CHAR
+  bool buf_write_char(BufId bufId, const char* const data_char_ptr)             // основная функция ЗАПИСИ в буфер CHAR
   {
     if(buf_is_id_correct(bufId)                     == false) { return false; }
     if(buf_will_this_data_fit(bufId, data_char_ptr) == false)                   // хватит ли места для записи? там же проверим на NULL

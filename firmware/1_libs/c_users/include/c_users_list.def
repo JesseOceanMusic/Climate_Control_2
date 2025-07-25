@@ -1,5 +1,5 @@
-         //USER_ID                      //USER_RIGHTS        // user tg id
-USERS_LIST(USER_NAME__INVALID,            USER_RIGHTS__NONE,    USERS__TG_ID_INVALID)  // ДОЛЖЕН БЫТЬ ПЕРВЫМ В СПИСКЕ!!!
-USERS_LIST(USER_NAME__GUEST,              USER_RIGHTS__USER,    USERS__TG_ID_INVALID)
-USERS_LIST(USER_NAME__TG__ME,             USER_RIGHTS__ROOT,    "123")
-USERS_LIST(USER_NAME__TG__SLAVA,          USER_RIGHTS__USER,    "123")
+         //name                         //rights               // telegram id
+USERS_LIST(USERS__NAMES__INVALID,         USERS__RIGHTS__NONE,    USERS__TG_ID__INVALID)  // ДОЛЖЕН БЫТЬ ПЕРВЫМ В СПИСКЕ!!!
+USERS_LIST(USERS__NAMES__GUEST,           USERS__RIGHTS__USER,    USERS__TG_ID__INVALID)
+USERS_LIST(USERS__NAMES__ME,              USERS__RIGHTS__ROOT,    "123")
+USERS_LIST(USERS__NAMES__SLAVA,           USERS__RIGHTS__USER,    "123")

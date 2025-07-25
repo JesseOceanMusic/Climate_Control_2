@@ -6,7 +6,7 @@
     #define BUF_FLOAT_MAX_SYMBOLS_LENGTH 64                                     // максимальная длина float в символах..
     #define BUF_FLOAT_MAX_PRECISION      6                                      // максимально количество знаков после запятой для аргумента функции buf_write_float()
 
-    extern const char* BUF_BAD_ID;                                              // для buf_get_arr_ptr()
+    extern const char* const BUF_BAD_ID;                                        // для buf_get_arr_ptr()
 
   // буферы
     typedef enum                                                                // перечисление id буферов
@@ -19,10 +19,10 @@
 
   // хелперы
     bool buf_is_id_correct     (BufId bufId);
-    bool buf_will_this_data_fit(BufId bufId, const char* data_char_ptr);
+    bool buf_will_this_data_fit(BufId bufId, const char* const data_char_ptr);
   
   // операции
-    bool buf_write_char (BufId bufId, const char* data_char_ptr);
+    bool buf_write_char (BufId bufId, const char* const data_char_ptr);
     bool buf_write_int  (BufId bufId, const int   data_int);
     bool buf_write_float(BufId bufId, const float data_float, const unsigned short precision);
     bool buf_clear      (BufId bufId);

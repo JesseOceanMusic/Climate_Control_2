@@ -1,7 +1,9 @@
                                                                    // description должен быть для каждой ошибки! хотя бы 1 символ
                                                                    // чтобы не было проблем с NULL
-// 'c_errors.c'
+// undefined err-zero
 ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__UNDEFINED,                  "undefined error id") 
+
+// 'c_errors.c'
 ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_ID,               "err < < wrong id")
 ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_TYPE,             "err < < wrong type")
 ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_RECEIVED_NULL,          "err < < NULL")
@@ -21,5 +23,7 @@ ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__TIME_WRAPPER_NULL,          "time_wrapper
 ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__TIME_WRAPPER_WRONG_YEAR,    "time_wrapper year < 2025")
 
 // 'users.c'
-ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__USERS_WRONG_TOKEN,          "users < < wrong token")
-ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__USERS_WRONG_USER_ID,        "users < < wrong user id")
+ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__USERS__WRONG_TOKEN,         "users < < wrong token")
+ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__USERS__WRONG_NAME,          "users < < wrong name")
+ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__USERS__WRONG_ID,            "users < < wrong id")
+ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__USERS__WRONG_STATE,         "users < < wrong state")

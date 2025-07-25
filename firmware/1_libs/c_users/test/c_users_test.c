@@ -6,6 +6,6 @@
 int main()
 {
   // correct input
-    assert(users__get_user_rights(USER_NAME__GUEST) != USER_RIGHTS__NONE);
+    assert(users__get_user_rights(USERS__NAMES__GUEST) != USERS__RIGHTS__NONE);
   return 0;
 }

@@ -1,10 +1,10 @@
                  //COMMAND NAME                           //USER_RIGHTS       // menu level (0-255) // description
 /*
-USERS_COMMAND_LIST(COMMAND_NAME__NONE,                      USER_RIGHTS__USER,               0,        NULL)
-USERS_COMMAND_LIST(COMMAND_NAME__GET_COMMAND_LIST,          USER_RIGHTS__USER,               1,        "вывести список основных комманд")
-USERS_COMMAND_LIST(COMMAND_NAME__GET_INFO_GENERAL,          USER_RIGHTS__USER,               2,        NULL)
-USERS_COMMAND_LIST(COMMAND_NAME__SET_BRIGHTNESS_DAY,        USER_RIGHTS__USER,               2,        "настройка яркости днём")
-USERS_COMMAND_LIST(COMMAND_NAME__SET_BRIGHTNESS_NIGHT,      USER_RIGHTS__USER,               2,        "настройка яркости ночью")
-USERS_COMMAND_LIST(COMMAND_NAME__SET_COLOUR,                USER_RIGHTS__USER,               2,        "настройка цвета")
-USERS_COMMAND_LIST(COMMAND_NAME__SET_COLOUR_BLUE,           USER_RIGHTS__USER,               3,        "настройка цвета: синий")
+USERS_COMMAND_LIST(COMMAND_NAME__IDLE,                      USERS__RIGHTS__USER,               0,        NULL)
+USERS_COMMAND_LIST(COMMAND_NAME__GET_COMMAND_LIST,          USERS__RIGHTS__USER,               1,        "вывести список основных комманд")
+USERS_COMMAND_LIST(COMMAND_NAME__GET_INFO_GENERAL,          USERS__RIGHTS__USER,               2,        NULL)
+USERS_COMMAND_LIST(COMMAND_NAME__SET_BRIGHTNESS_DAY,        USERS__RIGHTS__USER,               2,        "настройка яркости днём")
+USERS_COMMAND_LIST(COMMAND_NAME__SET_BRIGHTNESS_NIGHT,      USERS__RIGHTS__USER,               2,        "настройка яркости ночью")
+USERS_COMMAND_LIST(COMMAND_NAME__SET_COLOUR,                USERS__RIGHTS__USER,               2,        "настройка цвета")
+USERS_COMMAND_LIST(COMMAND_NAME__SET_COLOUR_BLUE,           USERS__RIGHTS__USER,               3,        "настройка цвета: синий")
 */

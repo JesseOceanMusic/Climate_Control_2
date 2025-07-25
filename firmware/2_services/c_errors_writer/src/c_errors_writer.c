@@ -2,7 +2,7 @@
 #include "c_errors_internal.h"
 #include "c_errors_writer.h"
 
-const char* ERR_HEADER_MESSAGE = "id/total counter/unhandled counter/description:\n";
+const char* const ERR_HEADER_MESSAGE = "id/total counter/unhandled counter/description:\n";
 
 static bool errwr__write_error_to_buffer(BufId bufId, ErrId errId)
 {
