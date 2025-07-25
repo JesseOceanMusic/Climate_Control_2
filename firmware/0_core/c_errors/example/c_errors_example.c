@@ -7,15 +7,15 @@
 
   int main()
   {
-    if(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == false)
+    if(err__has_unhandled_errors(ERR__TYPE__ANY_TYPE) == false)
     {
       printf("%s", "1. doesn't have unhandled errors =)\n");
     }
 
-    err_raise_error(ERR_ID__UNDEFINED);
+    err__raise_error(ERR__ID__UNDEFINED);
     printf("%s", "2. now i raised error...\n");
 
-    if(err_has_unhandled_errors(ERR_TYPE__ANY_TYPE) == true)
+    if(err__has_unhandled_errors(ERR__TYPE__ANY_TYPE) == true)
     {
       printf("%s", "3. has unhandled errors =)\n");
     }

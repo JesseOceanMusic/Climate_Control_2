@@ -3,13 +3,13 @@
   
   typedef enum
   {
-    ERR_TYPE__ANY_TYPE = 0,  // Должен быть первым! Должен быть 0 для тестов!   // Фильтр для поиска ошибок с любым типом //
-    ERR_TYPE__ALERT,          
-    ERR_TYPE__WARNING,
-    ERR_TYPE__ERROR,
-    ERR_TYPE__FATAL,
+    ERR__TYPE__ANY_TYPE = 0, // Должен быть первым! Должен быть 0 для тестов!   // Фильтр для поиска ошибок с любым типом //
+    ERR__TYPE__ALERT,          
+    ERR__TYPE__WARNING,
+    ERR__TYPE__ERROR,
+    ERR__TYPE__FATAL,
 
-    ERR_TYPE__AMOUNT,        // ДОЛЖЕН БЫТЬ ПОСЛЕДНИМ! // Количество Типов
+    ERR__TYPE__AMOUNT,        // ДОЛЖЕН БЫТЬ ПОСЛЕДНИМ! // Количество Типов
   } ErrType;
 
   typedef enum                                                                  // перечисление кодов ошибок
@@ -18,14 +18,14 @@
     #include "c_errors_list.def"                                                // в папке "c_errors/include"
     #undef  ERRORS_LIST
     
-    ERR_ID__AMOUNT,          // ДОЛЖЕН БЫТЬ ПОСЛЕДНИМ! // Количество Ошибок
+    ERR__ID__AMOUNT,          // ДОЛЖЕН БЫТЬ ПОСЛЕДНИМ! // Количество Ошибок
   }ErrId;
 
-  bool err_has_unhandled_errors (ErrType type);
-  bool err_raise_error          (ErrId error_id);
+  bool err__has_unhandled_errors (ErrType error_type);
+  bool err__raise_error          (ErrId error_id);
 
   // доп функции для юнит-тестов, интеграционных тестов
     #ifdef ENABLE_UNIT_TESTING_API
-      unsigned short err_get_total_counter(ErrId error_id);
-      void           err_reset_all();
+      unsigned short err__get_total_counter(ErrId error_id);
+      void           err__reset_all();
     #endif

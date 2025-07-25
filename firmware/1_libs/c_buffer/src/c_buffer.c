@@ -2,12 +2,11 @@
 #include "c_buffer.h"
 #include "c_errors_public.h"
 
-//#define BUFFER_FULL_CLEAR_WITH_MEMSET
-#ifdef BUFFER_FULL_CLEAR_WITH_MEMSET
+#ifdef BUF__FULL_CLEAR_WITH_MEMSET
   #include <string.h>
 #endif
 
-const char* const BUF_BAD_ID = "BUF_BAD_ID";
+const char* const BUF__BAD_ID = "BUF__BAD_ID";
 
 // создаём и инициализируем буферы из списка
   #define BUFFER_LIST(buffer_id, buffer_name, buffer_size) static char buffer_name[buffer_size] = {0}; // X-MACROS
@@ -23,42 +22,42 @@ struct BufInfoPrivate
 };
 
 // Создаём массив структур с информацией о буферах
-static struct BufInfoPrivate bufInfoPrivate[BUF_ID__AMOUNT] = {
+static struct BufInfoPrivate bufInfoPrivate[BUF__ID__AMOUNT] = {
     #define BUFFER_LIST(buffer_id, buffer_name, buffer_size) [buffer_id] = {buffer_name, buffer_size, 0},
     #include "c_buffer_list.def"
     #undef BUFFER_LIST
 };
 
 // хелперы
-  bool buf_is_id_correct(BufId bufId)
+  bool buf__is_id_correct(BufId bufId)
   {
-    if(bufId >= 0 && bufId < BUF_ID__AMOUNT) { return true; }
-    err_raise_error(ERR_ID__BUF_RECEIVED_WRONG_ID);
+    if(bufId >= 0 && bufId < BUF__ID__AMOUNT) { return true; }
+    err__raise_error(ERR__ID__BUF__RECEIVED_WRONG_ID);
     return false;
   }
 
-  bool buf_will_this_data_fit(BufId bufId, const char* const data_char_ptr)
+  bool buf__will_this_data_fit(BufId bufId, const char* const data_char_ptr)
   {
     if(data_char_ptr == NULL)
     {                                                                             
-      err_raise_error(ERR_ID__BUF_RECEIVED_NULL);
+      err__raise_error(ERR__ID__BUF__RECEIVED_NULL);
       return false;
     }
 
     unsigned int needed_size = snprintf(NULL, 0, "%s", data_char_ptr);
                                   
-    if(buf_get_size_left(bufId) < needed_size) { return false; }                // МЕСТО КОНЧИЛОСЬ
+    if(buf__get_size_left(bufId) < needed_size) { return false; }                // МЕСТО КОНЧИЛОСЬ
 
     return true;
   }
 
 // операции
-  bool buf_write_char(BufId bufId, const char* const data_char_ptr)             // основная функция ЗАПИСИ в буфер CHAR
+  bool buf__write_char(BufId bufId, const char* const data_char_ptr)             // основная функция ЗАПИСИ в буфер CHAR
   {
-    if(buf_is_id_correct(bufId)                     == false) { return false; }
-    if(buf_will_this_data_fit(bufId, data_char_ptr) == false)                   // хватит ли места для записи? там же проверим на NULL
+    if(buf__is_id_correct(bufId)                     == false) { return false; }
+    if(buf__will_this_data_fit(bufId, data_char_ptr) == false)                   // хватит ли места для записи? там же проверим на NULL
     {
-      err_raise_error(ERR_ID__BUF_OVERFILLED);
+      err__raise_error(ERR__ID__BUF__OVERFILLED);
       return false;
     }
 
@@ -68,36 +67,36 @@ static struct BufInfoPrivate bufInfoPrivate[BUF_ID__AMOUNT] = {
     return true;
   }
 
-  bool buf_write_int(BufId bufId, const int   data_int)                         // функция записи INT в буфер
+  bool buf__write_int(BufId bufId, const int   data_int)                         // функция записи INT в буфер
   {
-    //здесь на NULL проверять не надо -> проверим в buf_write_char()
-    char data_char_ptr[BUF_INT_MAX_SYMBOLS_LENGTH];
+    //здесь на NULL проверять не надо -> проверим в buf__write_char()
+    char data_char_ptr[BUF__INT_MAX_SYMBOLS_LENGTH];
     snprintf(data_char_ptr, sizeof(data_char_ptr), "%d", data_int);
-    return buf_write_char(bufId, data_char_ptr);
+    return buf__write_char(bufId, data_char_ptr);
   }
 
-  bool buf_write_float(BufId bufId, const float data_float, const unsigned short precision) // функция записи FLOAT в буфер
+  bool buf__write_float(BufId bufId, const float data_float, const unsigned short precision) // функция записи FLOAT в буфер
   {
-    //здесь на NULL проверять не надо -> проверим в buf_write_char()
-    if(precision > BUF_FLOAT_MAX_PRECISION)
+    //здесь на NULL проверять не надо -> проверим в buf__write_char()
+    if(precision > BUF__FLOAT_MAX_PRECISION)
     {
-      err_raise_error(ERR_ID__BUF_WRONG_FLOAT_PRECISION);
+      err__raise_error(ERR__ID__BUF__WRONG_FLOAT_PRECISION);
       return false;
     }
 
-    char data_char_ptr[BUF_FLOAT_MAX_SYMBOLS_LENGTH];
+    char data_char_ptr[BUF__FLOAT_MAX_SYMBOLS_LENGTH];
     snprintf(data_char_ptr, sizeof(data_char_ptr), "%.*f", precision, data_float);
                                                  // `.*` означает, что точность будет взята из следующего аргумента функции (precision)
-    return buf_write_char(bufId, data_char_ptr);
+    return buf__write_char(bufId, data_char_ptr);
   }
 
-  bool buf_clear(BufId bufId)                                                   // функция очистки буфера
+  bool buf__clear(BufId bufId)                                                   // функция очистки буфера
   {
-    if(buf_is_id_correct(bufId) == false) { return false; }
+    if(buf__is_id_correct(bufId) == false) { return false; }
 
     bufInfoPrivate[bufId].offset = 0;
 
-    #ifdef BUFFER_FULL_CLEAR_WITH_MEMSET
+    #ifdef BUF__FULL_CLEAR_WITH_MEMSET
       memset(bufInfoPrivate[bufId].ptr , 0, bufInfoPrivate[bufId].size);        // БЕЗОПАСНЕЕ // заполняет весь массив нулями
     #endif
 
@@ -107,15 +106,15 @@ static struct BufInfoPrivate bufInfoPrivate[BUF_ID__AMOUNT] = {
 
 
 // геттеры
-  const char* buf_get_arr_ptr  (BufId bufId)
+  const char* buf__get_arr_ptr  (BufId bufId)
   {
-    if(buf_is_id_correct(bufId) == false) { return BUF_BAD_ID; }
+    if(buf__is_id_correct(bufId) == false) { return BUF__BAD_ID; }
     return bufInfoPrivate[bufId].ptr;
   }
 
-  unsigned int buf_get_size_left(BufId bufId)
+  unsigned int buf__get_size_left(BufId bufId)
   {
-    if(buf_is_id_correct(bufId) == false) { return 0; }
+    if(buf__is_id_correct(bufId) == false) { return 0; }
 
     return (bufInfoPrivate[bufId].size - bufInfoPrivate[bufId].offset - 1);
     // size_left: сколько осталось байт для записи ('\0' уже вычтен)
@@ -127,9 +126,9 @@ static struct BufInfoPrivate bufInfoPrivate[BUF_ID__AMOUNT] = {
               // arr_size_  = 2
   }
 
-  bool buf_get_is_empty (BufId bufId)
+  bool buf__get_is_empty (BufId bufId)
   {
-    if(buf_is_id_correct(bufId) == false) { return false; }
+    if(buf__is_id_correct(bufId) == false) { return false; }
     if(bufInfoPrivate[bufId].offset == 0) { return true;  }
     return false;
   }

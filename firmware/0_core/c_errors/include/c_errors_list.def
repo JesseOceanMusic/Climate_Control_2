@@ -1,29 +1,28 @@
                                                                    // description должен быть для каждой ошибки! хотя бы 1 символ
                                                                    // чтобы не было проблем с NULL
-// undefined err-zero
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__UNDEFINED,                  "undefined error id") 
+// undefined err / err zero
+ERRORS_LIST(ERR__TYPE__ERROR,   ERR__ID__UNDEFINED,                  "undefined error id") 
 
 // 'c_errors.c'
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_ID,               "err < < wrong id")
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_WRONG_TYPE,             "err < < wrong type")
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_RECEIVED_NULL,          "err < < NULL")
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__ERR_DESCRIPTION_IS_NULL,    "err < < description is NULL")
+ERRORS_LIST(ERR__TYPE__ERROR,   ERR__ID__ERR__WRONG_ID,               "err < < wrong id")
+ERRORS_LIST(ERR__TYPE__ERROR,   ERR__ID__ERR__WRONG_TYPE,             "err < < wrong type")
+ERRORS_LIST(ERR__TYPE__ERROR,   ERR__ID__ERR__RECEIVED_NULL,          "err < < NULL")
+ERRORS_LIST(ERR__TYPE__ERROR,   ERR__ID__ERR__DESCRIPTION_IS_NULL,    "err < < description is NULL")
 
 // 'c_buffer.c'
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__BUF_RECEIVED_NULL,          "buf < < NULL")
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__BUF_RECEIVED_WRONG_ID,      "buf < < wrong id")
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__BUF_OVERFILLED,             "buf < < overfilled")
-ERRORS_LIST(ERR_TYPE__ERROR,   ERR_ID__BUF_WRONG_FLOAT_PRECISION,  "buf < < wrong float precision")
-
-// 'c_errors_writer.c'
-ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__ERR_WR_RECEIVED_NULL,       "err_wr < < NULL")
+ERRORS_LIST(ERR__TYPE__ERROR,   ERR__ID__BUF__RECEIVED_NULL,          "buf < < NULL")
+ERRORS_LIST(ERR__TYPE__ERROR,   ERR__ID__BUF__RECEIVED_WRONG_ID,      "buf < < wrong id")
+ERRORS_LIST(ERR__TYPE__ERROR,   ERR__ID__BUF__OVERFILLED,             "buf < < overfilled")
+ERRORS_LIST(ERR__TYPE__ERROR,   ERR__ID__BUF__WRONG_FLOAT_PRECISION,  "buf < < wrong float precision")
 
 // 'time_wrapper.c'
-ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__TIME_WRAPPER_NULL,          "time_wrapper localtime NULL")
-ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__TIME_WRAPPER_WRONG_YEAR,    "time_wrapper year < 2025")
+ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__TIME_WR__NULL,              "time_wrapper localtime NULL")
+ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__TIME_WR__WRONG_YEAR,        "time_wrapper year < 2025")
 
 // 'users.c'
-ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__USERS__WRONG_TOKEN,         "users < < wrong token")
-ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__USERS__WRONG_NAME,          "users < < wrong name")
-ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__USERS__WRONG_ID,            "users < < wrong id")
-ERRORS_LIST(ERR_TYPE__WARNING, ERR_ID__USERS__WRONG_STATE,         "users < < wrong state")
+ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__USERS__WRONG_TOKEN,         "users < < wrong token")
+ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__USERS__WRONG_NAME,          "users < < wrong name")
+ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__USERS__WRONG_ID,            "users < < wrong id")
+ERRORS_LIST(ERR__TYPE__WARNING, ERR__ID__USERS__WRONG_STATE,         "users < < wrong state")
+
+// 'c_errors_writer.c'

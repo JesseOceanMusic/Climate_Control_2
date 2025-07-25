@@ -32,7 +32,7 @@ static int users__cur_state[USERS__NAMES__AMOUNT] = {0};                        
         }
       }
     }
-    err_raise_error(ERR_ID__USERS__WRONG_TOKEN);
+    err__raise_error(ERR__ID__USERS__WRONG_TOKEN);
     return USERS__NAMES__INVALID;
   }
 
@@ -43,7 +43,7 @@ static int users__cur_state[USERS__NAMES__AMOUNT] = {0};                        
     {
       return true;
     }
-    err_raise_error(ERR_ID__USERS__WRONG_NAME);
+    err__raise_error(ERR__ID__USERS__WRONG_NAME);
     return false;
   }
 
@@ -74,7 +74,7 @@ static int users__cur_state[USERS__NAMES__AMOUNT] = {0};                        
         users__cur_state[user_name] = user_state;
         return true;
       }
-      err_raise_error(ERR_ID__USERS__WRONG_STATE);
+      err__raise_error(ERR__ID__USERS__WRONG_STATE);
     }
     return false;
   }
@@ -91,7 +91,7 @@ bool users__guest_set_id(const char* const user_tg_id)
     snprintf(users__tg_id_arr[USERS__NAMES__GUEST], sizeof(users__tg_id_arr[USERS__NAMES__GUEST]), "%s", user_tg_id);
     return true;
   }
-  err_raise_error(ERR_ID__USERS__WRONG_ID);
+  err__raise_error(ERR__ID__USERS__WRONG_ID);
   return false;
 }
 
