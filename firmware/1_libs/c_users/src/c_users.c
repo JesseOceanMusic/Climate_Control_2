@@ -21,7 +21,7 @@ static int users__cur_state[USERS__NAMES__AMOUNT] = {USERS__STATE__DEFAULT};    
 
 static bool users__check_user_name(UsersNames user_name)
 {
-  if(user_name > USERS__NAMES__INVALID && user_name < USERS__NAMES__AMOUNT)
+  if(user_name > USERS__NAMES__ERROR && user_name < USERS__NAMES__AMOUNT)
   {
     return true;
   }
@@ -32,9 +32,9 @@ static bool users__check_user_name(UsersNames user_name)
 // узнать имя (индекс) пользователя по айди... нужна для обработки входящих запросов
   UsersNames users__get_user_name(const char* const user_tg_id)
   {
-    if(user_tg_id != NULL && strcmp(user_tg_id, USERS__TG_ID__INVALID) != 0 && strcmp(user_tg_id, USERS__TG_ID__DEFAULT) != 0)
+    if(user_tg_id != NULL && strcmp(user_tg_id, USERS__TG_ID__ERROR) != 0 && strcmp(user_tg_id, USERS__TG_ID__DEFAULT) != 0)
     {
-      for(UsersNames id = USERS__NAMES__INVALID + 1; id < USERS__NAMES__AMOUNT; id++)
+      for(UsersNames id = USERS__NAMES__ERROR + 1; id < USERS__NAMES__AMOUNT; id++)
       {
         if(strcmp(user_tg_id, users__tg_id_arr[id]) == 0)
         {
@@ -43,17 +43,17 @@ static bool users__check_user_name(UsersNames user_name)
       }
     }
     err__raise_error(ERR__ID__USERS__WRONG_TG_ID);
-    return USERS__NAMES__INVALID;
+    return USERS__NAMES__ERROR;
   }
 
 // функции работы с пользователями
-  UsersRights users__get_user_rights(UsersNames user_name)
+  UsersRights users__get_rights(UsersNames user_name)
   {
     if(users__check_user_name(user_name) == true)
     {
       return users__rights_arr[user_name];
     }
-    return USERS__RIGHTS__NONE;
+    return USERS__RIGHTS__ERROR;
   }
 
   int users__get_cur_state  (UsersNames user_name)
@@ -81,7 +81,7 @@ static bool users__check_user_name(UsersNames user_name)
 
 void users__guest_reset_id()
 {
-  snprintf(users__tg_id_arr[USERS__NAMES__GUEST], sizeof(users__tg_id_arr[USERS__NAMES__GUEST]), "%s", USERS__TG_ID__INVALID);
+  snprintf(users__tg_id_arr[USERS__NAMES__GUEST], sizeof(users__tg_id_arr[USERS__NAMES__GUEST]), "%s", USERS__TG_ID__ERROR);
 }
 
 bool users__guest_set_id(const char* const user_tg_id)
@@ -95,17 +95,26 @@ bool users__guest_set_id(const char* const user_tg_id)
   return false;
 }
 
+const char* users__get_tg_id(UsersNames user_name)
+{
+  if(users__check_user_name(user_name) == true)
+  {
+    return users__tg_id_arr[user_name];
+  }
+  return USERS__TG_ID__ERROR;
+}
+
 // тесты
   _Static_assert(sizeof(users__cur_state)/sizeof(int)                 == USERS__NAMES__AMOUNT,     "Mismatch between USERS__NAMES__AMOUNT and users__rights_arr");
   _Static_assert(sizeof(users__rights_arr)/sizeof(UsersRights)        == USERS__NAMES__AMOUNT,     "Mismatch between USERS__NAMES__AMOUNT and users__rights_arr");
   _Static_assert(sizeof(users__tg_id_arr)/sizeof(users__tg_id_arr[0]) == USERS__NAMES__AMOUNT,     "Mismatch between USERS__NAMES__AMOUNT and users__tg_id_arr row count");
   _Static_assert(sizeof(users__tg_id_arr[0])                          == USERS__TG_ID__MAX_LENGTH, "Mismatch between USERS__TG_ID__MAX_LENGTH and users__tg_id_arr column size");
 
-  _Static_assert(USERS__RIGHTS__NONE     == 0,                     "USERS__RIGHTS__NONE must be 0");
-  _Static_assert(USERS__RIGHTS__AMOUNT   >  USERS__RIGHTS__NONE,   "USERS__RIGHTS__AMOUNT must be defined correctly");
+  _Static_assert(USERS__RIGHTS__ERROR     == 0,                     "USERS__RIGHTS__ERROR must be 0");
+  _Static_assert(USERS__RIGHTS__AMOUNT   >  USERS__RIGHTS__ERROR,   "USERS__RIGHTS__AMOUNT must be defined correctly");
 
-  _Static_assert(USERS__NAMES__INVALID   == 0,                     "USERS__NAMES__INVALID must be 0");
-  _Static_assert(USERS__NAMES__AMOUNT    >  USERS__NAMES__INVALID, "USERS__NAMES__AMOUNT must be defined correctly");
+  _Static_assert(USERS__NAMES__ERROR   == 0,                     "USERS__NAMES__ERROR must be 0");
+  _Static_assert(USERS__NAMES__AMOUNT    >  USERS__NAMES__ERROR, "USERS__NAMES__AMOUNT must be defined correctly");
 
   _Static_assert(USERS__TG_ID__MAX_LENGTH      >= 16,                      "USERS__TG_ID__MAX_LENGTH is too small");
-  _Static_assert(sizeof(USERS__TG_ID__INVALID) < USERS__TG_ID__MAX_LENGTH, "USERS__TG_ID__INVALID is too long");
+  _Static_assert(sizeof(USERS__TG_ID__ERROR) < USERS__TG_ID__MAX_LENGTH, "USERS__TG_ID__ERROR is too long");

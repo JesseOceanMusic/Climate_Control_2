@@ -1,5 +1,5 @@
          //name                         //rights               // telegram id
-USERS_LIST(USERS__NAMES__INVALID,         USERS__RIGHTS__NONE,    USERS__TG_ID__INVALID)  // ДОЛЖЕН БЫТЬ ПЕРВЫМ В СПИСКЕ!!!
+USERS_LIST(USERS__NAMES__ERROR,           USERS__RIGHTS__ERROR,   USERS__TG_ID__ERROR)  // ДОЛЖЕН БЫТЬ ПЕРВЫМ В СПИСКЕ!!!
 USERS_LIST(USERS__NAMES__GUEST,           USERS__RIGHTS__USER,    USERS__TG_ID__DEFAULT)
 USERS_LIST(USERS__NAMES__ME,              USERS__RIGHTS__ROOT,    USERS__TG_ID__DEFAULT)
 USERS_LIST(USERS__NAMES__SLAVA,           USERS__RIGHTS__USER,    USERS__TG_ID__DEFAULT)
