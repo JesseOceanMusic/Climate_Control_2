@@ -3,14 +3,14 @@
 #include "c_users.h"
 #include "c_errors_public.h"
 
-static char users__tg_id_arr[USERS__NAMES__AMOUNT][USERS__TG_ID__MAX_LENGTH] =     // массив с айди пользователей (для гостевого пользователя пришлось сделать не const)
+static char users__tg_id_arr[USERS__NAMES__AMOUNT][USERS__TG_ID__MAX_LENGTH] =  // массив с айди пользователей (для гостевого пользователя пришлось сделать не const)
 {
   #define USERS_LIST(user_name, user_rights, user_tg_id) [user_name] = user_tg_id,  // X-MACROS
   #include "c_users_list.def"                                                   // в папке "/include"
   #undef  USERS_LIST
 };
 
-static const UsersRights users__rights_arr[USERS__NAMES__AMOUNT] =               // массив с правами пользователей
+static const UsersRights users__rights_arr[USERS__NAMES__AMOUNT] =              // массив с правами пользователей
 {
   #define USERS_LIST(user_name, user_rights, user_tg_id) [user_name] = user_rights,   // X-MACROS
   #include "c_users_list.def"                                                   // в папке "/include"

@@ -36,5 +36,5 @@
     bool        users__set_cur_state  (UsersNames user_name, int user_state);   // установить текущее состояние пользователя // вернет false, если такого пользователя существует \\ -1 ставить нельзя! зарезервирован под ошибку! 
 
   // настройки гостевого пользователя
-  void        users__guest_reset_id();                                          // сброс айди гостевого пользователя
-  bool        users__guest_set_id(const char* const user_tg_id);                // добавить айди (добавить гостевого пользователя)
+    void users__guest_reset_id();                                               // сброс айди гостевого пользователя
+    bool users__guest_set_id(const char* const user_tg_id);                     // добавить айди (добавить гостевого пользователя)
