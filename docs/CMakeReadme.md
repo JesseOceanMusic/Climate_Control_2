@@ -1,51 +1,50 @@
-# Continuous (Непрерывные таргеты)**
+# Cmake Targets
+  ## Continuous (Непрерывные таргеты)
   **Используются в CI/CD для автоматического мониторинга изменений в репозитории и запуска сборки/тестов**
-    - Continuous	Запускает полный цикл: Configure → Build → Test → Coverage → Submit (если настроено)
-    - ContinuousBuild	Только сборка (Build)
-    - ContinuousConfigure	Только конфигурация (Configure)
-    - ContinuousCoverage	Запуск тестов с замером покрытия кода
-    - ContinuousMemCheck	Проверка на утечки памяти (через Valgrind или аналоги)
-    - ContinuousStart	Начинает мониторинг изменений (например, через git pull)
-    - ContinuousSubmit	Отправляет результаты на сервер (например, CDash)
-    - ContinuousTest	Только запуск тестов (Test)
-    - ContinuousUpdate	Обновляет исходники (например, делает git pull)
+  - **Continuous**:   *Запускает полный цикл: Configure → Build → Test → Coverage → Submit (если настроено)*
+  - **ContinuousBuild**:    *Только сборка (Build)*
+  - **ContinuousConfigure**:    *Только конфигурация (Configure)*
+  - **ContinuousCoverage**:   *Запуск тестов с замером покрытия кода*
+  - **ContinuousMemCheck**:   *Проверка на утечки памяти (через Valgrind или аналоги)*
+  - **ContinuousStart**:    *Начинает мониторинг изменений (например, через git pull)*
+  - **ContinuousSubmit**:   *Отправляет результаты на сервер (например, CDash)*
+  - **ContinuousTest**:   *Только запуск тестов (Test)*
+  - **ContinuousUpdate**:   *Обновляет исходники (например, делает git pull)*
 
-
-# Experimental (Экспериментальные таргеты)
+  ## Experimental (Экспериментальные таргеты)
   **Аналогичны Continuous, но запускаются вручную (не автоматически)**
-  *Пример: ExperimentalTest — запуск тестов без ожидания изменений в репозитории*
+  - *Пример: ExperimentalTest — запуск тестов без ожидания изменений в репозитории*
 
-
-# Nightly (Ночные таргеты)
+  ## Nightly (Ночные таргеты)
   **Запускаются по расписанию (например, каждую ночь). Используются для долгих тестов (stress-тесты, полное покрытие и т. д.).**
 
 
-# === CMake Tools (extension), менюшка слева === #
-  **Configure** (preset): Debug
-  **Buiid**     (target): ExperimentalBuild
-  **Debug**     (target): вот здесь стоит выбирать файл и запускать дебаггер
-  **Launch**    (target): запуск программы в консоль
-
-  {...}                 : Default
-
-
-# === Testing (extension), менюшка слева === #
-  **Run Test**              : Работает как и при клике на отдельный тест, так и при запуске всех тестов!
-  **Debug Test**            : НЕ Работает корректно! Он запустит не тот тест, на который нажмешь,
-                              а тот файл, который выбран в таргете дебага в Cmake Tools Extension.
-  **Run Test With Coverage**: Работает! Можно запускать как отдельно покрытие, чтобы посмотреть статстику изолированно
-                              Так и все тесты сразу (но тогда одни тесты могут покрыть часть других тестов)
+# Guide
+  ## CMake Tools (extension), менюшка слева
+  - **Configure(preset)**:    *Debug*
+  - **Buiid(target)**:    *ExperimentalBuild*
+  - **Debug(target)**:    *Вот здесь стоит выбирать файл и запускать дебаггер*
+  - **Launch(target)**:   *Запуск программы в консоль*
+  - **{...}**:    *Default*
 
 
-*на всякий случай - метод генерации coverage.info из терминала, если опять что-то сломается:*
-*lcov --capture --directory . --output-file coverage.info*
+  ## Testing (extension), менюшка слева
+  - **Run Test**              : Работает как и при клике на отдельный тест, так и при запуске всех тестов!
+  - **Debug Test**            : НЕ Работает корректно! Он запустит не тот тест, на который нажмешь,
+                                а тот файл, который выбран в таргете дебага в Cmake Tools Extension.
+  - **Run Test With Coverage**: Работает! Можно запускать как отдельно покрытие, чтобы посмотреть статстику изолированно
+                                Так и все тесты сразу (но тогда одни тесты могут покрыть часть других тестов)
 
-# 
 
-// LCOV_EXCL_LINE: Игнорирует всю строку.
+  *на всякий случай - метод генерации coverage.info из терминала, если опять что-то сломается:*
+  *lcov --capture --directory . --output-file coverage.info*
 
-// LCOV_EXCL_BR_LINE: Игнорирует только ветвление на этой строке (если есть другие операторы).
+  ## LCOV (исключение строк/веток/блока кода из тестов покрытия)
 
-// LCOV_EXCL_START       И    // LCOV_EXCL_STOP: Игнорирует целый блок кода.
+  `// LCOV_EXCL_LINE`: Игнорирует всю строку.
 
-// LCOV_EXCL_BR_START    И    // LCOV_EXCL_BR_STOP: Игнорирует ветвления в блоке кода.
+  `// LCOV_EXCL_BR_LINE`: Игнорирует только ветвление на этой строке (если есть другие операторы).
+
+  `// LCOV_EXCL_START`,   `// LCOV_EXCL_STOP`: Игнорирует целый блок кода.
+
+  `// LCOV_EXCL_BR_START`,   `// LCOV_EXCL_BR_STOP`: Игнорирует ветвления в блоке кода.
