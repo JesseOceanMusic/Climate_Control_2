@@ -24,7 +24,7 @@ int main()
     for(UsersNames userName = USERS__NAMES__ERROR + 1; userName < USERS__NAMES__AMOUNT; userName++)
     {
       assert(users__get_cur_state   (userName) == USERS__STATE__DEFAULT);
-      assert(users__get_rights      (userName) != USERS__NAMES__ERROR);
+      assert(users__get_rights      (userName) != USERS__RIGHTS__ERROR);
       assert(strcmp(users__get_tg_id(userName), USERS__TG_ID__ERROR) != 0);
       assert(strcmp(users__get_tg_id(userName), USERS__TG_ID__VALID) != 0);
     }

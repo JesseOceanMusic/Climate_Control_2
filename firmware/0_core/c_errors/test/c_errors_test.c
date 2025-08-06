@@ -167,10 +167,6 @@ int main()
       assert(errInfo.counter_unhandled == 1);                                   // 1
       printf("  PASS: < < NULL.\n");
 
-    // тест 
-
-
-
     // Полный сброс, тест функции для тестирования (должен быть определен макрос ENABLE_UNIT_TESTING_API в tasks.json)
       assert(err__get_total_counter(ERR__ID__ERR__RECEIVED_NULL) == 1);            // 1
       assert(err__get_total_counter(ERR__ID__AMOUNT) == 0);                       // неправильный айди отправили - вернуло 0

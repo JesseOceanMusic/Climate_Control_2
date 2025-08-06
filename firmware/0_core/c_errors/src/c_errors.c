@@ -112,12 +112,12 @@
     _Static_assert(sizeof(err__description_ptr_arr)/sizeof(char*) == ERR__ID__AMOUNT, "Mismatch between ERR__ID__AMOUNT and err__description_ptr_arr");
     _Static_assert(sizeof(err__type_arr)/sizeof(ErrType)          == ERR__ID__AMOUNT, "Mismatch between ERR__ID__AMOUNT and err__type_arr");
 
-    _Static_assert(ERR__ID__UNDEFINED         == 0,               "ERR__ID__UNDEFINED must be 0");            
+    _Static_assert(ERR__ID__UNDEFINED          == 0,                "ERR__ID__UNDEFINED must be 0");            
     _Static_assert(ERR__ID__ERR__WRONG_ID      < ERR__ID__AMOUNT,   "ERR__ID__ERR__WRONG_ID must be defined in c_errors_list.def!");
     _Static_assert(ERR__ID__ERR__WRONG_TYPE    < ERR__ID__AMOUNT,   "ERR__ID__ERR__WRONG_TYPE must be defined in c_errors_list.def!");
     _Static_assert(ERR__ID__ERR__RECEIVED_NULL < ERR__ID__AMOUNT,   "ERR__ID__ERR__RECEIVED_NULL must be defined in c_errors_list.def!");
 
-    _Static_assert(ERR__TYPE__ANY_TYPE        == 0,               "ERR__TYPE__ANY_TYPE must be 0!");
+    _Static_assert(ERR__TYPE__ANY_TYPE        == 0,                "ERR__TYPE__ANY_TYPE must be 0!");
     _Static_assert(ERR__TYPE__ANY_TYPE        < ERR__TYPE__AMOUNT, "ERR__TYPE__ANY_TYPE must be defined in c_errors_list.def!");
 
   // доп функции для юнит-тестов, интеграционных тестов
